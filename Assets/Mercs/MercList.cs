@@ -14,8 +14,19 @@ public class MercList : MonoBehaviour
     public void ShowList()
     {
         mercCont oldCont = mercList.GetComponent<mercCont>();
-        
-        foreach(GameObject merc in oldCont.mercList)
+
+        for (int i = 0; i < oldCont.mercList.Count; i++)
+        {
+            for (int j = 0; j < oldCont.mercList.Count; j++)
+            {
+                if (oldCont.mercList[i] == oldCont.mercList[j] && i != j)
+                {
+                    oldCont.mercList.RemoveAt(i);
+                }
+            }
+        }
+
+        foreach (GameObject merc in oldCont.mercList)
         {
             GameObject buttonPrefab = GameObject.Find("MercListButton");
             GameObject button = (GameObject)Instantiate(buttonPrefab);
@@ -23,6 +34,7 @@ public class MercList : MonoBehaviour
             button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
             deleteList.Add(button);
             button.GetComponent<Button>().onClick.AddListener(delegate { ShowMercButton(merc); });
+            
         }
         
         

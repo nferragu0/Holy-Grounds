@@ -4,18 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 public class missionGenerator : MonoBehaviour
 {
-    public GameObject chanceText;
+    private GameObject chanceText;
+    public Button btn;
+
     // Start is called before the first frame update
     void Start()
     {
-        float chance = Random.Range(50.0f, 100.0f);
-        chanceText.GetComponent<UnityEngine.UI.Text>().text = "Success Chance: "+chance.ToString()+"%";
+        //get button
+        btn = gameObject.GetComponentInParent(typeof(Button)) as Button;
+        //when clicked, set mission
+        btn.onClick.AddListener(regenerateMission);
 
+        //get chance text for work units and set it
+        regenerateMission();
+
+    }
+
+    void regenerateMission()
+    {
+        chanceText = GameObject.Find("ChanceText");
+        float chance1 = Random.Range(0.0f, 1.0f);
+        int chance = (int)(chance1 * 10) + 1;
+        chanceText.GetComponent<UnityEngine.UI.Text>().text = "Work Units Required: " + chance.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
+
+    
 }

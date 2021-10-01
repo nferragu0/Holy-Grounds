@@ -16,15 +16,20 @@ public class Merc : MonoBehaviour
     public int swordSkill = 50;
     public int armorSkill = 50;
 
+    public bool recruited = false;
+
     // Start is called before the first frame update
     void Start()
     {
         currHP = Random.Range(40, 60);
-        maxHP = maxHP;
+        maxHP = currHP;
         morale = Random.Range(40, 60);
         strength = Random.Range(40, 60);
         swordSkill = Random.Range(40, 60);
         armorSkill = Random.Range(40, 60);
+        float chance = Random.Range(50.0f, 100.0f);
+        mercName = chance.ToString();
+        name = mercName;
     }
     
 }
