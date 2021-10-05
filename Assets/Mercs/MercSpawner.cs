@@ -12,6 +12,7 @@ public class MercSpawner : MonoBehaviour
     [SerializeField] GameObject MercRecruitIndividualMenu;
     public List<GameObject> recruitMercList;
     public List<GameObject> deleteList;
+    public List<GameObject> buttonList;
 
     public void spawnMerc()
     {
@@ -29,6 +30,7 @@ public class MercSpawner : MonoBehaviour
             button.GetComponentInChildren<Text>().text = go1.GetComponent<Merc>().mercName;
             deleteList.Add(button);
             button.GetComponent<Button>().onClick.AddListener(delegate { displayMerc(go1,button); });
+            deleteList.Add(button);
         }
 
         /*
@@ -43,20 +45,23 @@ public class MercSpawner : MonoBehaviour
 
     void displayMerc(GameObject i,GameObject currButton)
     {
-        //GameObject MercManageMenu = GameObject.Find("RecruitMenu");
-        MercRecruitIndividualMenu.SetActive(true);
+        if (i != null)
+        {
+            //GameObject MercManageMenu = GameObject.Find("RecruitMenu");
+            MercRecruitIndividualMenu.SetActive(true);
 
-        GameObject textName = GameObject.Find("MercRecruitName");
-        GameObject mercHP = GameObject.Find("MercRecruitHP");
-        GameObject mercOtherStats = GameObject.Find("MercRecruitOther");
-        string newName = "Name: " + i.GetComponent<Merc>().mercName;
-        textName.GetComponent<Text>().text = newName;
-        mercHP.GetComponent<Text>().text = "HP: " + i.GetComponent<Merc>().currHP.ToString();
-        //mercOtherStats.GetComponent<Text>().text = textName.GetComponent<Text>().text + ": Morale: " + i.GetComponent<Merc>().morale + ": strength: " + i.GetComponent<Merc>().strength + ": swordSkill: " + i.GetComponent<Merc>().swordSkill + ": armorSkill: " + i.GetComponent<Merc>().armorSkill;
-        MercRecruitMenu.SetActive(false);
+            GameObject textName = GameObject.Find("MercRecruitName");
+            GameObject mercHP = GameObject.Find("MercRecruitHP");
+            GameObject mercOtherStats = GameObject.Find("MercRecruitOther");
+            string newName = "Name: " + i.GetComponent<Merc>().mercName;
+            textName.GetComponent<Text>().text = newName;
+            mercHP.GetComponent<Text>().text = "HP: " + i.GetComponent<Merc>().currHP.ToString();
+            //mercOtherStats.GetComponent<Text>().text = textName.GetComponent<Text>().text + ": Morale: " + i.GetComponent<Merc>().morale + ": strength: " + i.GetComponent<Merc>().strength + ": swordSkill: " + i.GetComponent<Merc>().swordSkill + ": armorSkill: " + i.GetComponent<Merc>().armorSkill;
+            MercRecruitMenu.SetActive(false);
 
-        GameObject recruitButton = GameObject.Find("RecruitToActive");
-        recruitButton.GetComponent<Button>().onClick.AddListener(delegate { addMerctoPool(i, currButton); });
+            GameObject recruitButton = GameObject.Find("RecruitToActive");
+            recruitButton.GetComponent<Button>().onClick.AddListener(delegate { addMerctoPool(i, currButton); });
+        }
 
     }
 
@@ -96,6 +101,11 @@ public class MercSpawner : MonoBehaviour
         {
             Destroy(garbo);
         }
+        foreach (GameObject garbo in deleteList)
+        {
+            Destroy(garbo);
+        }
+
     }
     
 }
