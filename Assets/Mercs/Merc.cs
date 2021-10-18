@@ -17,6 +17,9 @@ public class Merc : MonoBehaviour
     public int armorSkill = 50;
 
     public bool recruited = false;
+    public bool swordEquip = false;
+
+    public GameObject weaponEquip;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,8 @@ public class Merc : MonoBehaviour
         float chance = Random.Range(50.0f, 100.0f);
         mercName = chance.ToString();
         name = mercName;
+        swordEquip = true;
+        weaponEquip = GameObject.Find("sword_empty");
     }
     
 }
