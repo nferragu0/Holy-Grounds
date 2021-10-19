@@ -16,6 +16,11 @@ public class MercList : MonoBehaviour
     public GameObject sword2;
     public GameObject sword3;
 
+    public GameObject armor0;
+    public GameObject armor1;
+    public GameObject armor2;
+    public GameObject armor3;
+
     GameObject currMerc;
 
     public List<GameObject> deleteList;
@@ -91,6 +96,24 @@ public class MercList : MonoBehaviour
         equipSword(currMerc, sword3);
     }
 
+    public void armor0func()
+    {
+        equipArmor(currMerc, armor0);
+    }
+    public void armor1func()
+    {
+        equipArmor(currMerc, armor1);
+    }
+    public void armor2func()
+    {
+        equipArmor(currMerc, armor2);
+    }
+    public void armor3func()
+    {
+        equipArmor(currMerc, armor3);
+    }
+
+
     void equipSword(GameObject i,GameObject e)
     {
         //check if equipment available
@@ -124,6 +147,44 @@ public class MercList : MonoBehaviour
                 int q = i.GetComponent<Merc>().swordSkill;
                 int n = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().attackVal;
                 i.GetComponent<Merc>().swordSkill = q + n;
+                i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
+            }
+        }
+    }
+
+    void equipArmor(GameObject i, GameObject e)
+    {
+        //check if equipment available
+        if (e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().numInv > 0)
+        {
+            //check if anything equiped
+            if (i.GetComponent<Merc>().defEquip)
+            {
+                i.GetComponent<Merc>().defEquip = true;
+                i.GetComponent<Merc>().armorEquip.GetComponent<armorInit>().numInv += 1;
+                e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().numInv = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().numInv - 1;
+
+                int q = i.GetComponent<Merc>().armorSkill;
+                int n = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().defVal;
+                i.GetComponent<Merc>().armorSkill = i.GetComponent<Merc>().baseArmor + n;
+                /*
+                q = i.GetComponent<Merc>().armorSkill;
+                n = i.GetComponent<Merc>().armorEquip.GetComponent<armorInit>().defVal;
+                i.GetComponent<Merc>().armorSkill = q - n;
+                */
+                i.GetComponent<Merc>().armorEquip = e.GetComponent<equipInnit>().equipmentPoiner;
+
+
+            }
+
+            //check if nothing equiped
+            if (!i.GetComponent<Merc>().defEquip)
+            {
+                i.GetComponent<Merc>().defEquip = true;
+                e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().numInv = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().numInv - 1;
+                int q = i.GetComponent<Merc>().armorSkill;
+                int n = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<armorInit>().defVal;
+                i.GetComponent<Merc>().armorSkill = q + n;
                 i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
             }
         }
