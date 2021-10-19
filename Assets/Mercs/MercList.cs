@@ -73,16 +73,7 @@ public class MercList : MonoBehaviour
         MercManageMenu.SetActive(false);
 
     }
-
-    public void showEquipMenu()
-    {
-        //setup buttons for equipment
-        sword0.GetComponent<Button>().onClick.AddListener(delegate { equipSword(currMerc, sword0); });
-        sword1.GetComponent<Button>().onClick.AddListener(delegate { equipSword(currMerc, sword1); });
-        sword2.GetComponent<Button>().onClick.AddListener(delegate { equipSword(currMerc, sword2); });
-        sword3.GetComponent<Button>().onClick.AddListener(delegate { equipSword(currMerc, sword3); });
-    }
-
+    
     public void sword0func()
     {
         equipSword(currMerc, sword0);
@@ -102,41 +93,38 @@ public class MercList : MonoBehaviour
 
     void equipSword(GameObject i,GameObject e)
     {
-        i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().numInv += 1;
-        
-        //check to make sure you have enough
-        if (i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().weaponName == "empty")
-        {
-            i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().numInv += 1;
-            i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
-        }
+        //check if equipment available
         if (e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv > 0)
         {
-            //unequip old weapon
-            //if (i.GetComponent<Merc>().swordEquip)
-            //{
-            i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().numInv += 1;
-                //i.GetComponent<Merc>().swordSkill -= i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().attackVal;
-
-            int minus1 = i.GetComponent<Merc>().swordSkill;
-            int minus2 = i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().attackVal;
-            i.GetComponent<Merc>().swordSkill = minus1 - minus2;
-            i.GetComponent<Merc>().swordEquip = false;
-            //check for equiped sword
-            if (!i.GetComponent<Merc>().swordEquip)
+            //check if anything equiped
+            if (i.GetComponent<Merc>().swordEquip)
             {
-                //equip init
-                i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().numInv -= 1;
                 i.GetComponent<Merc>().swordEquip = true;
-                i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
+                i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().numInv += 1;
+                e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv - 1;
 
-                //equip sword
                 int q = i.GetComponent<Merc>().swordSkill;
                 int n = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().attackVal;
                 i.GetComponent<Merc>().swordSkill = q + n;
-                e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv - 1;
 
-                
+                q = i.GetComponent<Merc>().swordSkill;
+                n = i.GetComponent<Merc>().weaponEquip.GetComponent<weaponInit>().attackVal;
+                i.GetComponent<Merc>().swordSkill = q - n;
+
+                i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
+
+
+            }
+
+            //check if nothing equiped
+            if (!i.GetComponent<Merc>().swordEquip)
+            {
+                i.GetComponent<Merc>().swordEquip = true;
+                e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().numInv - 1;
+                int q = i.GetComponent<Merc>().swordSkill;
+                int n = e.GetComponent<equipInnit>().equipmentPoiner.GetComponent<weaponInit>().attackVal;
+                i.GetComponent<Merc>().swordSkill = q + n;
+                i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
             }
         }
     }

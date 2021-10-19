@@ -4111,7 +4111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackVal: 5
   crafttime: 2
-  numInv: 5
+  numInv: 1
   weaponName: Sword + 5
 --- !u!1 &1159569817
 GameObject:

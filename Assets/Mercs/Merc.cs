@@ -33,7 +33,6 @@ public class Merc : MonoBehaviour
         float chance = Random.Range(50.0f, 100.0f);
         mercName = chance.ToString();
         name = mercName;
-        swordEquip = true;
         weaponEquip = GameObject.Find("sword_empty");
     }
     
