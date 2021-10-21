@@ -15,36 +15,38 @@ public class missionGenerator : MonoBehaviour
     public Dictionary<int,Dictionary<string, string>> MissionList;
     public Dictionary<string, string> newMission;
 
+    public int currentlySelectedMission;
+
     // Start is called before the first frame update
     void Start()
     {
+        currentlySelectedMission = -1;
         MissionList = new Dictionary<int, Dictionary<string, string>>();
         //on new day generate Missions
         generateMission();
+
+        //for accepting missions
+        GameObject.Find("ConfirmMissionButton").GetComponent<Button>().onClick.AddListener(confirmMission);
+        
+
     }
 
     void generateMission()
     {
-        //temporary hack
-        var button = Instantiate(newMissionButton, Vector3.zero, Quaternion.identity) as Button;
-        var rectTransform = button.GetComponent<RectTransform>();
-
+        //make three missions
         for (int i = 0; i < 3; i++) {
-            //temporary hack
-            if (i != 0)
-            {
-                button = Instantiate(newMissionButton, Vector3.zero, Quaternion.identity) as Button;
-                rectTransform = button.GetComponent<RectTransform>();
-            }
-            //"CurrentMissionsScrollView"
-            //button.GetComponentInChildren(Text).text = (i+1).ToString();
+            
+            var button = Instantiate(newMissionButton, Vector3.zero, Quaternion.identity) as Button;
+            var rectTransform = button.GetComponent<RectTransform>();
+            
+            button.GetComponentInChildren<Text>().text = "Mission "+(i+1).ToString();
             button.name = (i + 1).ToString();
             rectTransform.SetParent(GameObject.Find("MissionCanvas").transform);
             rectTransform.offsetMin = Vector2.zero;
             rectTransform.offsetMax = Vector2.zero;
             rectTransform.sizeDelta = new Vector2(100, 100);
 
-            rectTransform.position = new Vector3( (i+1)*100,350,0);
+            rectTransform.position = new Vector3( 100+(i+1)*100,300,0);
             button.onClick.AddListener(selectMission);
 
             //create mission information into a dictionary
@@ -61,20 +63,31 @@ public class missionGenerator : MonoBehaviour
     void selectMission()
     {
         int missionId = int.Parse(EventSystem.current.currentSelectedGameObject.name);
-        Debug.Log(missionId);
-        Debug.Log("Work Units Required: "+MissionList[missionId]["work units"]);
+        if (currentlySelectedMission != -1)
+        {
+            GameObject.Find(currentlySelectedMission.ToString()).GetComponent<Image>().color = Color.white;
+        }
+        currentlySelectedMission = missionId;
+        GameObject.Find(missionId.ToString()).GetComponent<Image>().color = Color.gray;
+        //set selected mission information on UI
+        GameObject.Find("SelectedMissionText").GetComponent<Text>().text = 
+        "Work Units Required: " + MissionList[missionId]["work units"] + "\n" +
+        "Length: " + MissionList[missionId]["length"] + " days" + "\n" +
+        "Reward: " + MissionList[missionId]["reward"] + " gold";
 
-        Debug.Log("Length: "+MissionList[missionId]["length"]+" days");
 
-        Debug.Log("Reward: "+MissionList[missionId]["reward"]+" gold");
+    }
+    void confirmMission()
+    {
+        var missions = GameObject.Find("MissionContainer").GetComponent<MissionContainerScript>();
+        int missionId = currentlySelectedMission;
+        
+        missions.addMission(MissionList[missionId]);
     }
     // Update is called once per frame
     void Update()
     {
-        //read this for future me:
-        //now add code to the above for loop to create randomized missions information DONE
-        //then have it display said information for whatever last clicked on mission button
-        //extra: have selected mission highlighted somehow
+
     }
 
     
