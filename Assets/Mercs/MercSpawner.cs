@@ -21,16 +21,17 @@ public class MercSpawner : MonoBehaviour
         {
             mercCont oldCont = mercList.GetComponent<mercCont>();
             GameObject go1 = new GameObject();
+            Merc newScript = go1.AddComponent<Merc>();
             recruitMercList.Add(go1);
             oldCont.recruitList.Add(go1);
-            Merc newScript = go1.AddComponent<Merc>();
             
             GameObject button = (GameObject)Instantiate(buttonPrefab);
             button.transform.parent = GameObject.Find("RecruitMenuPanel").transform;
-            button.GetComponentInChildren<Text>().text = go1.GetComponent<Merc>().mercName;
             deleteList.Add(button);
             button.GetComponent<Button>().onClick.AddListener(delegate { displayMerc(go1,button); });
             deleteList.Add(button);
+
+            button.GetComponentInChildren<Text>().text = go1.GetComponent<Merc>().mercName;
         }
 
         /*
@@ -53,12 +54,23 @@ public class MercSpawner : MonoBehaviour
             GameObject textName = GameObject.Find("MercRecruitName");
             GameObject mercHP = GameObject.Find("MercRecruitHP");
             GameObject mercOtherStats = GameObject.Find("MercRecruitOther");
+
+
+            GameObject MercAttack = GameObject.Find("MercRecruitAttack");
+            GameObject MercDef = GameObject.Find("MercRecruitDef");
+            GameObject MercMorale = GameObject.Find("MercRecruitMorale");
+
             string newName = "Name: " + i.GetComponent<Merc>().mercName;
             textName.GetComponent<Text>().text = newName;
             mercHP.GetComponent<Text>().text = "HP: " + i.GetComponent<Merc>().currHP.ToString();
             //mercOtherStats.GetComponent<Text>().text = textName.GetComponent<Text>().text + ": Morale: " + i.GetComponent<Merc>().morale + ": strength: " + i.GetComponent<Merc>().strength + ": swordSkill: " + i.GetComponent<Merc>().swordSkill + ": armorSkill: " + i.GetComponent<Merc>().armorSkill;
-            MercRecruitMenu.SetActive(false);
 
+            MercAttack.GetComponent<Text>().text = "Attack: " + (i.GetComponent<Merc>().strength + i.GetComponent<Merc>().swordSkill).ToString();
+            MercDef.GetComponent<Text>().text = "Defense: " + i.GetComponent<Merc>().armorSkill.ToString();
+            MercMorale.GetComponent<Text>().text = "Morale: " + i.GetComponent<Merc>().morale.ToString();
+            
+            MercRecruitMenu.SetActive(false);
+            
             GameObject recruitButton = GameObject.Find("RecruitToActive");
             recruitButton.GetComponent<Button>().onClick.AddListener(delegate { addMerctoPool(i, currButton); });
         }

@@ -70,11 +70,17 @@ public class MercList : MonoBehaviour
 
         GameObject textName = GameObject.Find("MercName");
         GameObject mercHP = GameObject.Find("MercHP");
-        GameObject mercOtherStats = GameObject.Find("MercOther");
+        GameObject MercAttack = GameObject.Find("MercAttack");
+        GameObject MercDef = GameObject.Find("MercDef");
+        GameObject MercMorale = GameObject.Find("MercMorale");
         string newName = "Name: " + i.GetComponent<Merc>().mercName;
         textName.GetComponent<Text>().text = i.GetComponent<Merc>().mercName;
         mercHP.GetComponent<Text>().text = "HP: " + i.GetComponent<Merc>().currHP.ToString();
         //mercOtherStats.GetComponent<Text>().text = textName.GetComponent<Text>().text + ": Morale: " + i.GetComponent<Merc>().morale + ": strength: " + i.GetComponent<Merc>().strength + ": swordSkill: " + i.GetComponent<Merc>().swordSkill + ": armorSkill: " + i.GetComponent<Merc>().armorSkill;
+        MercAttack.GetComponent<Text>().text = "Attack: " + (i.GetComponent<Merc>().strength + i.GetComponent<Merc>().swordSkill).ToString();
+        MercDef.GetComponent<Text>().text = "Defense: " + i.GetComponent<Merc>().armorSkill.ToString();
+        MercMorale.GetComponent<Text>().text = "Morale: " + i.GetComponent<Merc>().morale.ToString();
+
         MercManageMenu.SetActive(false);
 
     }
