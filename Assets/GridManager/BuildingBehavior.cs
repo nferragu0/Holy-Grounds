@@ -5,17 +5,24 @@ using UnityEngine.UI;
 
 public class BuildingBehavior : MonoBehaviour
 {
-    //public GameObject activebutton;
+    public Button activebutton = null;
 
-    public List<ArrayList> Building_list = new List<ArrayList>();
-
+    /*
     void Start()
     {
     }
-
+    */
     public void getActive(Button b)
     {
-        Debug.Log(b.name);
+        //Debug.Log(b.name);
+        //b.GetComponent<Building_data>().ID = 5;
+        activebutton = b;
+        //Debug.Log(activebutton);
+
     }
 
+    public void changeGridID(int ID)
+    {
+        activebutton.GetComponent<Building_data>().ID = ID;
+    }
 }
