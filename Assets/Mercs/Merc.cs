@@ -14,6 +14,9 @@ public class Merc : MonoBehaviour
     public int morale = 50;
     public int strength = 50;
 
+    public int foodCost = 15;
+    public int goldCost = 25;
+
     public int swordSkill = 50;
     public int armorSkill = 50;
 
