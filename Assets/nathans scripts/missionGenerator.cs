@@ -41,12 +41,12 @@ public class missionGenerator : MonoBehaviour
             
             button.GetComponentInChildren<Text>().text = "Mission "+(i+1).ToString();
             button.name = (i + 1).ToString();
-            rectTransform.SetParent(GameObject.Find("MissionCanvas").transform);
+            rectTransform.SetParent(GameObject.Find("MissionPanel").transform);
             rectTransform.offsetMin = Vector2.zero;
             rectTransform.offsetMax = Vector2.zero;
             rectTransform.sizeDelta = new Vector2(100, 100);
 
-            rectTransform.position = new Vector3( 100+(i+1)*100,300,0);
+            rectTransform.position = new Vector3( 200+(i+1)*100,450,0);
             button.onClick.AddListener(selectMission);
 
             //create mission information into a dictionary
