@@ -41,12 +41,15 @@ public class BuildingBehavior : MonoBehaviour
         {
             case 1: //Mess Hall
                 activebutton.GetComponent<Image>().color = Color.red;
+                activebutton.GetComponentInChildren<Text>().text = "Mess Hall";
                 break;
             case 2: //Training Area
                 activebutton.GetComponent<Image>().color = Color.green;
+                activebutton.GetComponentInChildren<Text>().text = "Training Area";
                 break;
             case 3: //Blacksmith
                 activebutton.GetComponent<Image>().color = Color.blue;
+                activebutton.GetComponentInChildren<Text>().text = "Blacksmith";
                 break;
         }
     }
