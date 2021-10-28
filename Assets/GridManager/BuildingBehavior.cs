@@ -9,7 +9,9 @@ public class BuildingBehavior : MonoBehaviour
     public GameObject menu = null;
     public GameObject messMenu = null;
     public GameObject resource = null;
+    public GameObject bs = null;
     public List<GameObject> old;
+    public int cost = 0;
 
 
     //public List<GameObject> deleteList;
@@ -44,7 +46,7 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponent<Image>().color = Color.green;
                 break;
             case 3: //Blacksmith
-                activebutton.GetComponent<Image>().color = Color.yellow;
+                activebutton.GetComponent<Image>().color = Color.blue;
                 break;
         }
     }
@@ -55,9 +57,7 @@ public class BuildingBehavior : MonoBehaviour
         int check = -1;
         //Debug.Log(activebutton.GetComponent<Building_data>().ID);
         check = activebutton.GetComponent<Building_data>().ID;
-        Debug.Log(check);
-        //menu = GameObject.Find("BuildingMenu");
-        //Debug.Log(menu);
+        //Debug.Log(check);
 
         switch (check)
         {
@@ -66,23 +66,9 @@ public class BuildingBehavior : MonoBehaviour
                 break;
             case 1: // Mess Hall
                 menu.SetActive(false);
-                //TODO add Mess Hall functionality
-                //mercList = GameObject.Find("MercContainer");
                 mL = mercList.GetComponent<mercCont>().mercList;
                 messMenu.SetActive(true);
-
-
-                foreach (GameObject merc in mL)
-                {
-                    GameObject buttonPrefab = GameObject.Find("MessHallListButton");
-                    GameObject button = (GameObject)Instantiate(buttonPrefab);
-                    button.transform.parent = panel.transform;
-                    button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
-                    old.Add(button);
-                    button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
-
-                }
-
+                makeMenu("MessHallListButton");
                 break;
             case 2: // Training Area
                 menu.SetActive(false);
@@ -91,7 +77,7 @@ public class BuildingBehavior : MonoBehaviour
             case 3: // Blacksmith
                 menu.SetActive(false);
                 //TODO add Blacksmith Functionality
-
+                bs.SetActive(true);
                 break;
         }
     }
@@ -101,6 +87,9 @@ public class BuildingBehavior : MonoBehaviour
 
         m.GetComponent<Merc>().morale += 5;
         resource.GetComponent<NDB_Behavior>().food -= 5;
+        GameObject ob = GameObject.Find("FoodTotal");
+        ob.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().food.ToString();
+
     }
 
     public void Hide()
@@ -110,5 +99,44 @@ public class BuildingBehavior : MonoBehaviour
             Destroy(m);
         }
         messMenu.SetActive(false);
+    }
+    public void makeMenu(string ob)
+    {
+        foreach (GameObject merc in mL)
+        {
+            GameObject buttonPrefab = GameObject.Find(ob);
+            GameObject button = (GameObject)Instantiate(buttonPrefab);
+            button.transform.parent = panel.transform;
+            button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
+            old.Add(button);
+            button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
+
+        }
+    }
+
+    public void makeEquipment(string name)
+    {
+        string sub = name.Substring(0,5);
+        //Debug.Log(sub);
+        GameObject eq = GameObject.Find(name);
+        switch (sub)
+        {
+            case "sword":
+                eq.GetComponent<weaponInit>().numInv += 1;
+                break;
+            case "armor":
+                eq.GetComponent<armorInit>().numInv += 1;
+                break;
+        }
+        
+        resource.GetComponent<NDB_Behavior>().iron -= cost;
+        GameObject ob = GameObject.Find("IronTotal");
+        ob.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().iron.ToString();
+ 
+    }
+    
+    public void setCost(int c)
+    {
+        cost = c;
     }
 }
