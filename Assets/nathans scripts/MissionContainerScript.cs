@@ -7,7 +7,9 @@ public class MissionContainerScript : MonoBehaviour
     public List<Dictionary<string,string>> missionsInProgress;
 
     public List<Dictionary<string, string>> availableMissions;
-
+    void Update()
+    {
+    }
     void Start()
     {
         missionsInProgress = new List<Dictionary<string, string>>();
