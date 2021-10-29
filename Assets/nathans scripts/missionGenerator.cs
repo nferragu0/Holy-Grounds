@@ -12,7 +12,7 @@ public class missionGenerator : MonoBehaviour
 
 
     //list of available missions, id: {length,work units, reward}
-    public Dictionary<int,Dictionary<string, string>> MissionList;
+    public List<Dictionary<string, string>> MissionList;
     public Dictionary<string, string> newMission;
 
     public int currentlySelectedMission;
@@ -21,7 +21,7 @@ public class missionGenerator : MonoBehaviour
     void Start()
     {
         currentlySelectedMission = -1;
-        MissionList = new Dictionary<int, Dictionary<string, string>>();
+        MissionList = new List<Dictionary<string, string>>();
         //on new day generate Missions
         generateMission();
 
@@ -31,8 +31,16 @@ public class missionGenerator : MonoBehaviour
 
     }
 
-    void generateMission()
+    public void generateMission()
     {
+        if (GameObject.Find("1") != null)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                Destroy(GameObject.Find(i.ToString()));
+            }
+        }
+        
         //make three missions
         for (int i = 0; i < 3; i++) {
             
@@ -56,12 +64,18 @@ public class missionGenerator : MonoBehaviour
             newMission.Add("length", Random.Range(1, 4).ToString());
             newMission.Add("reward", Random.Range(75, 200).ToString());
             //append mission to container
-            MissionList.Add(i+1,newMission);
-
+            MissionList.Add(newMission);
         }
+
+        //submit mission list to mission container
+        GameObject.Find("MissionContainer").GetComponent<MissionContainerScript>().setAvailableMissions(MissionList);
+
+
     }
+    
     void selectMission()
     {
+        //grab last clicked mission
         int missionId = int.Parse(EventSystem.current.currentSelectedGameObject.name);
         if (currentlySelectedMission != -1)
         {
@@ -69,11 +83,16 @@ public class missionGenerator : MonoBehaviour
         }
         currentlySelectedMission = missionId;
         GameObject.Find(missionId.ToString()).GetComponent<Image>().color = Color.gray;
+
+
         //set selected mission information on UI
+        int position = missionId - 1;
         GameObject.Find("SelectedMissionText").GetComponent<Text>().text = 
-        "Work Units Required: " + MissionList[missionId]["work units"] + "\n" +
-        "Length: " + MissionList[missionId]["length"] + " days" + "\n" +
-        "Reward: " + MissionList[missionId]["reward"] + " gold";
+        "Work Units Required: " + MissionList[position]["work units"] + "\n" +
+        "Length: " + MissionList[position]["length"] + " days" + "\n" +
+        "Reward: " + MissionList[position]["reward"] + " gold";
+
+        
 
 
     }
@@ -82,7 +101,7 @@ public class missionGenerator : MonoBehaviour
         var missions = GameObject.Find("MissionContainer").GetComponent<MissionContainerScript>();
         int missionId = currentlySelectedMission;
         
-        missions.addMission(MissionList[missionId]);
+        missions.addMission(MissionList[missionId-1]);
     }
     // Update is called once per frame
     void Update()
