@@ -34,8 +34,20 @@ public class NDB_Behavior : MonoBehaviour
             }
         }
 
-
+        //mission progresses each day
+        GameObject missionContainer = GameObject.Find("MissionContainer");
+        if (missionContainer != null)
+        {
+            missionContainer.GetComponent<MissionContainerScript>().nextDay();
+            //missionContainer.GetComponent<MissionContainerScript>().populateViewPort();
+        }
+        GameObject missionPanel = GameObject.Find("MissionPanel");
+        if (missionPanel != null)
+        {
+            missionPanel.GetComponent<missionGenerator>().generateMission();
+        }
         
+
         food -= foodUpkeep;
         gold -= goldUpkeep;
         goldTotal.GetComponent<Text>().text = gold.ToString();
