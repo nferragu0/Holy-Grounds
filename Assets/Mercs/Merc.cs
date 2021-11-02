@@ -20,6 +20,8 @@ public class Merc : MonoBehaviour
     public int swordSkill = 50;
     public int armorSkill = 50;
 
+    public int trait;
+
     //dont display this value to players. internal number to keep track of armor value(for some reason swords don't need this even thouth they run the same code)
     public int baseArmor = 50;
 
@@ -49,6 +51,9 @@ public class Merc : MonoBehaviour
         
 
         currHP = Random.Range(40, 60);
+
+        trait = Random.Range(0, 3);
+
         maxHP = currHP;
         morale = Random.Range(40, 60);
         strength = Random.Range(40, 60);
