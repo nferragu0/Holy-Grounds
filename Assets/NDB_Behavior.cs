@@ -104,7 +104,7 @@ public class NDB_Behavior : MonoBehaviour
     public void aggressiveEvent()
     {
         //make sure list for mercs with traits is clear
-        if (traitList != null)
+        if (traitList.Count != 0)
         {
             traitList.Clear();
 
@@ -120,7 +120,7 @@ public class NDB_Behavior : MonoBehaviour
                 traitList.Add(merc);
             }
         }
-        if (traitList != null)
+        if (traitList.Count != 0)
         {
             
             eventButtonTrigger.SetActive(true);
