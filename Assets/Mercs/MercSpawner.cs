@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class MercSpawner : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class MercSpawner : MonoBehaviour
     public List<GameObject> recruitMercList;
     public List<GameObject> deleteList;
     public List<GameObject> buttonList;
+
+    private UnityAction action;
 
     public void spawnMerc()
     {
@@ -72,6 +75,7 @@ public class MercSpawner : MonoBehaviour
             MercRecruitMenu.SetActive(false);
             
             GameObject recruitButton = GameObject.Find("RecruitToActive");
+
             recruitButton.GetComponent<Button>().onClick.AddListener(delegate { addMerctoPool(i, currButton); });
         }
 

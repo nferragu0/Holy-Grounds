@@ -33,6 +33,7 @@ public class NDB_Behavior : MonoBehaviour
 
     public List<GameObject> traitList;
 
+
     public void NDB_press()
     {
 
@@ -70,19 +71,70 @@ public class NDB_Behavior : MonoBehaviour
         bool fireEvent = true;
         if (fireEvent)
         {
-            int eventNum = 1;
+
+
+            int eventNum = 0;
             //int eventNum = Random.Range(0, 3);
+
+            // theft event. option 0
+            if (eventNum == 0)
+            {
+                theftEvent();
+            }
 
             //aggressive event. Trait 1
             if (eventNum == 1)
             {
                 aggressiveEvent();
             }
+
+            
+        }
+
+        // daily health regen
+        foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
+        {
+            if (merc.GetComponent<Merc>().currHP < merc.GetComponent<Merc>().maxHP)
+            {
+                //if health difference too small just full heal
+                if (merc.GetComponent<Merc>().maxHP - merc.GetComponent<Merc>().currHP < 3)
+                {
+                    merc.GetComponent<Merc>().currHP = merc.GetComponent<Merc>().maxHP;
+                }
+                else
+                {
+                    //increase current health by random
+                    merc.GetComponent<Merc>().currHP += Random.Range(1, 3);
+                }
+            }
+
+            //make sure they do not have more than max health
+            if (merc.GetComponent<Merc>().currHP > merc.GetComponent<Merc>().maxHP)
+            {
+                merc.GetComponent<Merc>().currHP = merc.GetComponent<Merc>().maxHP;
+            }
         }
     }
 
     public void conflictEventButton1()
     {
+
+        //theft event
+        if (tempListVar == 0)
+        {
+            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
+            {
+                
+                for (int i = 0; i < MercList.GetComponent<mercCont>().mercList.Count; i++)
+                {
+                    if (MercList.GetComponent<mercCont>().mercList[i] == option1Merc)
+                    {
+                        MercList.GetComponent<mercCont>().mercList.Remove(option1Merc);
+                    }
+                }
+
+            }
+        }
 
         //aggressive event
         if (tempListVar == 1)
@@ -94,6 +146,18 @@ public class NDB_Behavior : MonoBehaviour
 
     public void conflictEventButton2()
     {
+        //theft event
+        if (tempListVar == 0)
+        {
+            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
+            {
+                foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
+                {
+                    merc.GetComponent<Merc>().morale -= 2;
+                }
+            }
+        }
+
         //aggressive event
         if (tempListVar == 1)
         {
@@ -107,7 +171,6 @@ public class NDB_Behavior : MonoBehaviour
         if (traitList.Count != 0)
         {
             traitList.Clear();
-
         }
 
         //set var for which trait
@@ -144,4 +207,26 @@ public class NDB_Behavior : MonoBehaviour
 
         }
     }
+
+    public void theftEvent()
+    {
+        if (MercList.GetComponent<mercCont>().mercList.Count != 0)
+        {
+            tempListVar = 0;
+            eventButtonTrigger.SetActive(true);
+
+            foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
+            {
+                traitList.Add(merc);
+            }
+            GameObject eventTriggerMerc = MercList.GetComponent<mercCont>().mercList[Random.Range(0, MercList.GetComponent<mercCont>().mercList.Count - 1)];
+
+            option1Merc = eventTriggerMerc;
+
+            eventText.GetComponent<Text>().text = "It has come to our attention that " + eventTriggerMerc.GetComponent<Merc>().mercName + " has been stealing. He must be dealth with. What are your orders.";
+            option1.GetComponentInChildren<Text>().text = "He dares to steal from us? Fire him";
+            option2.GetComponentInChildren<Text>().text = "Ignore it for now, we need him";
+        }
+    }
+    
 }
