@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class NDB_Behavior : MonoBehaviour
 {
     public int food = 1000;
@@ -32,6 +33,28 @@ public class NDB_Behavior : MonoBehaviour
 
 
     public List<GameObject> traitList;
+
+    public float timeRemaining = 10;
+    public int maximum = 100;
+    public int current;
+    public Image mask;
+
+
+    void Update()
+    {
+        if (timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+            current = (int)timeRemaining * 10;
+            float fillAmount = (float)current / (float)maximum;
+            mask.fillAmount = fillAmount;
+        }
+        else
+        {
+            timeRemaining = 10;
+            NDB_press();
+        }
+    }
 
 
     public void NDB_press()
