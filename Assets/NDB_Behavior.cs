@@ -56,10 +56,8 @@ public class NDB_Behavior : MonoBehaviour
         }
     }
 
-
-    public void NDB_press()
+    public void upkeepUpdate()
     {
-
         foodUpkeep = 10;
         goldUpkeep = 10;
 
@@ -77,8 +75,8 @@ public class NDB_Behavior : MonoBehaviour
         GameObject missionData = GameObject.Find("MissionContainer");
         missionData.GetComponent<MissionData>().incDay();
 
-        
-        
+
+
         //apply upkeep
         food -= foodUpkeep;
         gold -= goldUpkeep;
@@ -86,17 +84,21 @@ public class NDB_Behavior : MonoBehaviour
         foodTotal.GetComponent<Text>().text = food.ToString();
 
 
-        goldDef.GetComponent<Text>().text = "(-" + goldUpkeep.ToString() + ")"; 
+        goldDef.GetComponent<Text>().text = "(-" + goldUpkeep.ToString() + ")";
         foodDef.GetComponent<Text>().text = "(-" + foodUpkeep.ToString() + ")";
+    }
+
+    public void NDB_press()
+    {
+        upkeepUpdate();
+
 
 
         //trait events
-        bool fireEvent = true;
-        if (fireEvent)
+        int eventFire = Random.Range(0, 10);
+        if(eventFire % 2 == 1)
         {
-
-
-            int eventNum = 0;
+            int eventNum = 2;
             //int eventNum = Random.Range(0, 3);
 
             // theft event. option 0
@@ -110,31 +112,38 @@ public class NDB_Behavior : MonoBehaviour
             {
                 aggressiveEvent();
             }
-
-            
+            if (eventNum == 2)
+            {
+                foodSpoilage();
+            }
         }
 
         // daily health regen
         foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
         {
-            if (merc.GetComponent<Merc>().currHP < merc.GetComponent<Merc>().maxHP)
+            //make sure merc is alive
+            if (merc.GetComponent<Merc>().currHP > 0)
             {
-                //if health difference too small just full heal
-                if (merc.GetComponent<Merc>().maxHP - merc.GetComponent<Merc>().currHP < 3)
+
+                if (merc.GetComponent<Merc>().currHP < merc.GetComponent<Merc>().maxHP)
+                {
+                    //if health difference too small just full heal
+                    if (merc.GetComponent<Merc>().maxHP - merc.GetComponent<Merc>().currHP < 3)
+                    {
+                        merc.GetComponent<Merc>().currHP = merc.GetComponent<Merc>().maxHP;
+                    }
+                    else
+                    {
+                        //increase current health by random
+                        merc.GetComponent<Merc>().currHP += Random.Range(1, 3);
+                    }
+                }
+
+                //make sure they do not have more than max health
+                if (merc.GetComponent<Merc>().currHP > merc.GetComponent<Merc>().maxHP)
                 {
                     merc.GetComponent<Merc>().currHP = merc.GetComponent<Merc>().maxHP;
                 }
-                else
-                {
-                    //increase current health by random
-                    merc.GetComponent<Merc>().currHP += Random.Range(1, 3);
-                }
-            }
-
-            //make sure they do not have more than max health
-            if (merc.GetComponent<Merc>().currHP > merc.GetComponent<Merc>().maxHP)
-            {
-                merc.GetComponent<Merc>().currHP = merc.GetComponent<Merc>().maxHP;
             }
         }
     }
@@ -155,7 +164,6 @@ public class NDB_Behavior : MonoBehaviour
                         MercList.GetComponent<mercCont>().mercList.Remove(option1Merc);
                     }
                 }
-
             }
         }
 
@@ -163,6 +171,12 @@ public class NDB_Behavior : MonoBehaviour
         if (tempListVar == 1)
         {
             gold -= 25;
+            goldTotal.GetComponent<Text>().text = gold.ToString();
+        }
+        //food spoil
+        if (tempListVar == 2)
+        {
+            gold -= 100;
             goldTotal.GetComponent<Text>().text = gold.ToString();
         }
     }
@@ -185,6 +199,13 @@ public class NDB_Behavior : MonoBehaviour
         if (tempListVar == 1)
         {
             option2Merc.GetComponent<Merc>().morale -= 10;
+        }
+
+        //food spoil
+        if (tempListVar == 2)
+        {
+            food -= 100;
+            foodTotal.GetComponent<Text>().text = food.ToString();
         }
     }
 
@@ -251,5 +272,14 @@ public class NDB_Behavior : MonoBehaviour
             option2.GetComponentInChildren<Text>().text = "Ignore it for now, we need him";
         }
     }
-    
+
+    public void foodSpoilage()
+    {
+        tempListVar = 2;
+        eventButtonTrigger.SetActive(true);
+        eventText.GetComponent<Text>().text = "Some of our food has gone bad. We must rectify this problem";
+        option1.GetComponentInChildren<Text>().text = "Buy more food";
+        option2.GetComponentInChildren<Text>().text = "We can't spare any gold right now";
+    }
+
 }
