@@ -22,6 +22,7 @@ public class Merc : MonoBehaviour
 
     public bool isBusy = false;
     public int daysBusy = 0;
+    public string traitName;
 
     public int trait;
 
@@ -55,7 +56,7 @@ public class Merc : MonoBehaviour
 
         currHP = Random.Range(40, 60);
 
-        trait = Random.Range(0, 3);
+        trait = Random.Range(0, 10);
 
         maxHP = currHP;
         morale = Random.Range(40, 60);
@@ -70,7 +71,33 @@ public class Merc : MonoBehaviour
         armorEquip = GameObject.Find("armor_empty");
 
         baseArmor = armorSkill;
-        
+
+        //aggressive trait
+        if(trait == 1)
+        {
+            strength += 10;
+            traitName = "Aggressive";
+        }
+        //cowardly trait
+        if (trait == 2)
+        {
+            morale -= 10;
+            traitName = "Cowardly";
+        }
+        //fat trait
+        if (trait == 3)
+        {
+            foodCost += 10;
+            traitName = "Fat";
+        }
+        //greedy trait
+        if (trait == 4)
+        {
+            goldCost += 10;
+            traitName = "Greedy";
+        }
+
+
     }
 
     public int getMissionUnit()

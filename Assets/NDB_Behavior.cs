@@ -104,14 +104,8 @@ public class NDB_Behavior : MonoBehaviour
         int eventFire = Random.Range(0, 10);
         if(eventFire % 2 == 1)
         {
-            int eventNum = 2;
+            int eventNum = 4;
             //int eventNum = Random.Range(0, 3);
-
-            // theft event. option 0
-            if (eventNum == 0)
-            {
-                theftEvent();
-            }
 
             //aggressive event. Trait 1
             if (eventNum == 1)
@@ -121,6 +115,12 @@ public class NDB_Behavior : MonoBehaviour
             if (eventNum == 2)
             {
                 foodSpoilage();
+            }
+
+            // theft event. option 4
+            if (eventNum == 4)
+            {
+                theftEvent();
             }
         }
 
@@ -182,21 +182,7 @@ public class NDB_Behavior : MonoBehaviour
     public void conflictEventButton1()
     {
 
-        //theft event
-        if (tempListVar == 0)
-        {
-            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
-            {
-                
-                for (int i = 0; i < MercList.GetComponent<mercCont>().mercList.Count; i++)
-                {
-                    if (MercList.GetComponent<mercCont>().mercList[i] == option1Merc)
-                    {
-                        MercList.GetComponent<mercCont>().mercList.Remove(option1Merc);
-                    }
-                }
-            }
-        }
+        
 
         //aggressive event
         if (tempListVar == 1)
@@ -210,21 +196,27 @@ public class NDB_Behavior : MonoBehaviour
             gold -= 100;
             goldTotal.GetComponent<Text>().text = gold.ToString();
         }
+
+        //theft event
+        if (tempListVar == 4)
+        {
+            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
+            {
+
+                for (int i = 0; i < MercList.GetComponent<mercCont>().mercList.Count; i++)
+                {
+                    if (MercList.GetComponent<mercCont>().mercList[i] == option1Merc)
+                    {
+                        MercList.GetComponent<mercCont>().mercList.Remove(option1Merc);
+                    }
+                }
+            }
+        }
     }
 
     public void conflictEventButton2()
     {
-        //theft event
-        if (tempListVar == 0)
-        {
-            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
-            {
-                foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
-                {
-                    merc.GetComponent<Merc>().morale -= 2;
-                }
-            }
-        }
+        
 
         //aggressive event
         if (tempListVar == 1)
@@ -237,6 +229,18 @@ public class NDB_Behavior : MonoBehaviour
         {
             food -= 100;
             foodTotal.GetComponent<Text>().text = food.ToString();
+        }
+
+        //theft event
+        if (tempListVar == 4)
+        {
+            if (MercList.GetComponent<mercCont>().mercList.Count != 0)
+            {
+                foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
+                {
+                    merc.GetComponent<Merc>().morale -= 2;
+                }
+            }
         }
     }
 
@@ -285,22 +289,44 @@ public class NDB_Behavior : MonoBehaviour
 
     public void theftEvent()
     {
+        traitList.Clear();
         if (MercList.GetComponent<mercCont>().mercList.Count != 0)
         {
-            tempListVar = 0;
-            eventButtonTrigger.SetActive(true);
 
+            if (traitList.Count != 0)
+            {
+                traitList.Clear();
+            }
+
+            //4 checks for greedy trait
+            tempListVar = 4;
             foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
             {
-                traitList.Add(merc);
+                if (merc.GetComponent<Merc>().trait == tempListVar)
+                {
+                    traitList.Add(merc);
+                }
             }
-            GameObject eventTriggerMerc = MercList.GetComponent<mercCont>().mercList[Random.Range(0, MercList.GetComponent<mercCont>().mercList.Count - 1)];
 
-            option1Merc = eventTriggerMerc;
+            if (traitList.Count != 0)
+            {
+                eventButtonTrigger.SetActive(true);
 
-            eventText.GetComponent<Text>().text = "It has come to our attention that " + eventTriggerMerc.GetComponent<Merc>().mercName + " has been stealing. He must be dealth with. What are your orders.";
-            option1.GetComponentInChildren<Text>().text = "He dares to steal from us? Fire him";
-            option2.GetComponentInChildren<Text>().text = "Ignore it for now, we need him";
+                //get triggering merc and victim
+                GameObject eventTriggerMerc = traitList[Random.Range(0, traitList.Count - 1)];
+
+                //make sure same merc is not trigger and victim
+                if (eventTriggerMerc.GetComponent<Merc>().mercName == eventTriggerMerc.GetComponent<Merc>().mercName)
+                {
+                    eventTriggerMerc = traitList[Random.Range(0, traitList.Count - 1)];
+                }
+
+                option1Merc = eventTriggerMerc;
+
+                eventText.GetComponent<Text>().text = "It has come to our attention that " + eventTriggerMerc.GetComponent<Merc>().mercName + " has been stealing. He must be dealth with. What are your orders.";
+                option1.GetComponentInChildren<Text>().text = "He dares to steal from us? Fire him";
+                option2.GetComponentInChildren<Text>().text = "Ignore it for now, we need him";
+            }
         }
     }
 
