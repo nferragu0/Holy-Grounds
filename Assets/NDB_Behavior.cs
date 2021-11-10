@@ -139,10 +139,11 @@ public class NDB_Behavior : MonoBehaviour
                 }
             }
 
-            foreach (GameObject e in holdIndex)
+
+            foreach (GameObject merc in holdIndex)
             {
-                //Debug.Log(e.GetComponent<Merc>().mercName + " was removed from the infirmary");
-                infirmList.Remove(e);
+                Debug.Log(merc.GetComponent<Merc>().mercName + " was removed from the infirmary");
+                infirmList.Remove(merc);
             }
 
             holdIndex.Clear();

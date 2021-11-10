@@ -76,7 +76,7 @@ public class BuildingBehavior : MonoBehaviour
                 menu.SetActive(false);
                 mL = mercList.GetComponent<mercCont>().mercList;
                 messMenu.SetActive(true);
-                makeMessMenu("MessHallListButton");
+                makeMessMenu("MessHallListButton", 0);
                 break;
             case 2: // Training Area
                 menu.SetActive(false);
@@ -90,7 +90,7 @@ public class BuildingBehavior : MonoBehaviour
                 menu.SetActive(false);
                 mL = mercList.GetComponent<mercCont>().mercList;
                 messMenu.SetActive(true);
-                makeInfMenu("MessHallListButton");
+                makeMessMenu("MessHallListButton", 1);
                 break;
         }
     }
@@ -113,7 +113,7 @@ public class BuildingBehavior : MonoBehaviour
         }
         messMenu.SetActive(false);
     }
-    public void makeMessMenu(string ob)
+    public void makeMessMenu(string ob, int func)
     {
         foreach (GameObject merc in mL)
         {
@@ -122,23 +122,22 @@ public class BuildingBehavior : MonoBehaviour
             button.transform.parent = panel.transform;
             button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
             old.Add(button);
-            button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
+            //button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
+
+            switch (func)
+            {
+                case 0: // Mess Hall
+                    button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
+                    break;
+                case 1: // Infirmary
+                    button.GetComponent<Button>().onClick.AddListener(delegate { addMercToInf(merc); });
+                    break;
+                case 2: // Training Hall
+                    //button.GetComponent<Button>().onClick.AddListener(delegate { (merc); });
+                    break;
+            }
 
         }
-    }
-
-    public void makeInfMenu(string ob)
-    {
-        foreach(GameObject merc in mL)
-        {
-            GameObject buttonPrefab = GameObject.Find(ob);
-            GameObject button = (GameObject)Instantiate(buttonPrefab);
-            button.transform.parent = panel.transform;
-            button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
-            old.Add(button);
-            button.GetComponent<Button>().onClick.AddListener(delegate { addMercToInf(merc); });
-
-            }
     }
 
     public void addMercToInf(GameObject m)
