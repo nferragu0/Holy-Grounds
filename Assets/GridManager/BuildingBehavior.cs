@@ -12,6 +12,7 @@ public class BuildingBehavior : MonoBehaviour
     public GameObject bs = null;
     public List<GameObject> old;
     public int cost = 0;
+    public List<GameObject> mercInf;
 
 
     //public List<GameObject> deleteList;
@@ -51,6 +52,10 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponent<Image>().color = Color.blue;
                 activebutton.GetComponentInChildren<Text>().text = "Blacksmith";
                 break;
+            case 4: // Infirmary
+                activebutton.GetComponent<Image>().color = Color.yellow;
+                activebutton.GetComponentInChildren<Text>().text = "Infirmary";
+                break;
         }
     }
 
@@ -71,7 +76,7 @@ public class BuildingBehavior : MonoBehaviour
                 menu.SetActive(false);
                 mL = mercList.GetComponent<mercCont>().mercList;
                 messMenu.SetActive(true);
-                makeMenu("MessHallListButton");
+                makeMessMenu("MessHallListButton");
                 break;
             case 2: // Training Area
                 menu.SetActive(false);
@@ -79,8 +84,13 @@ public class BuildingBehavior : MonoBehaviour
                 break;
             case 3: // Blacksmith
                 menu.SetActive(false);
-                //TODO add Blacksmith Functionality
                 bs.SetActive(true);
+                break;
+            case 4: // Infirmary
+                menu.SetActive(false);
+                mL = mercList.GetComponent<mercCont>().mercList;
+                messMenu.SetActive(true);
+                makeInfMenu("MessHallListButton");
                 break;
         }
     }
@@ -103,7 +113,7 @@ public class BuildingBehavior : MonoBehaviour
         }
         messMenu.SetActive(false);
     }
-    public void makeMenu(string ob)
+    public void makeMessMenu(string ob)
     {
         foreach (GameObject merc in mL)
         {
@@ -115,6 +125,33 @@ public class BuildingBehavior : MonoBehaviour
             button.GetComponent<Button>().onClick.AddListener(delegate { addMorale(merc); });
 
         }
+    }
+
+    public void makeInfMenu(string ob)
+    {
+        foreach(GameObject merc in mL)
+        {
+            GameObject buttonPrefab = GameObject.Find(ob);
+            GameObject button = (GameObject)Instantiate(buttonPrefab);
+            button.transform.parent = panel.transform;
+            button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
+            old.Add(button);
+            button.GetComponent<Button>().onClick.AddListener(delegate { addMercToInf(merc); });
+
+            }
+    }
+
+    public void addMercToInf(GameObject m)
+    {
+        //Debug.Log(m.GetComponent<Merc>().isBusy);
+        m.GetComponent<Merc>().isBusy = true;
+        double curr = (double)m.GetComponent<Merc>().currHP;
+        double ma = (double)m.GetComponent<Merc>().maxHP;
+        double calc = ((ma - curr) / 10.0);
+        int days = (int)System.Math.Ceiling(calc);
+
+        m.GetComponent<Merc>().daysBusy = days;
+        resource.GetComponent<NDB_Behavior>().infirmList.Add(m);
     }
 
     public void makeEquipment(string name)

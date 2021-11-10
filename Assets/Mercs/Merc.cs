@@ -20,6 +20,9 @@ public class Merc : MonoBehaviour
     public int swordSkill = 50;
     public int armorSkill = 50;
 
+    public bool isBusy = false;
+    public int daysBusy = 0;
+
     public int trait;
 
     //dont display this value to players. internal number to keep track of armor value(for some reason swords don't need this even thouth they run the same code)
@@ -60,6 +63,9 @@ public class Merc : MonoBehaviour
         swordSkill = Random.Range(40, 60);
         armorSkill = Random.Range(40, 60);
         float chance = Random.Range(50.0f, 100.0f);
+        isBusy = false;
+        daysBusy = 0;
+
         weaponEquip = GameObject.Find("sword_empty");
         armorEquip = GameObject.Find("armor_empty");
 

@@ -9,6 +9,7 @@ public class NDB_Behavior : MonoBehaviour
     public int food = 1000;
     public int gold = 1000;
     public int iron = 400;
+    public int curr_day = 1;
 
     public int foodUpkeep = 10;
     public int goldUpkeep = 10;
@@ -17,6 +18,7 @@ public class NDB_Behavior : MonoBehaviour
     public GameObject foodTotal;
     public GameObject goldDef;
     public GameObject foodDef;
+    public GameObject dayNum;
 
     public GameObject eventButtonTrigger;
     public GameObject eventWindow;
@@ -38,6 +40,10 @@ public class NDB_Behavior : MonoBehaviour
     public int maximum = 100;
     public int current;
     public Image mask;
+
+    public List<GameObject> infirmList;
+    public List<GameObject> trainList;
+    public List<GameObject> holdIndex;
 
 
     void Update()
@@ -91,8 +97,8 @@ public class NDB_Behavior : MonoBehaviour
     public void NDB_press()
     {
         upkeepUpdate();
-
-
+        curr_day++;
+        dayNum.GetComponent<Text>().text = curr_day.ToString();
 
         //trait events
         int eventFire = Random.Range(0, 10);
@@ -116,6 +122,30 @@ public class NDB_Behavior : MonoBehaviour
             {
                 foodSpoilage();
             }
+        }
+
+        if (infirmList.Count != 0)
+        {
+            //List<GameObject> holdIndex = new List<GameObject>();
+            for (int i = 0; i < infirmList.Count; i++)
+            {
+                infirmList[i].GetComponent<Merc>().daysBusy -= 1;
+
+                if (infirmList[i].GetComponent<Merc>().daysBusy == 0)
+                {
+                    infirmList[i].GetComponent<Merc>().isBusy = false;
+                    infirmList[i].GetComponent<Merc>().currHP = infirmList[i].GetComponent<Merc>().maxHP;
+                    holdIndex.Add(infirmList[i]);
+                }
+            }
+
+            foreach (GameObject e in holdIndex)
+            {
+                //Debug.Log(e.GetComponent<Merc>().mercName + " was removed from the infirmary");
+                infirmList.Remove(e);
+            }
+
+            holdIndex.Clear();
         }
 
         // daily health regen
