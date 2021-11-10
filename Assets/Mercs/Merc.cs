@@ -22,7 +22,7 @@ public class Merc : MonoBehaviour
 
     public bool isBusy = false;
     public int daysBusy = 0;
-    public string traitName;
+    public string traitName = "None";
 
     public int trait;
 

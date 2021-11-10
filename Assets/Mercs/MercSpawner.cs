@@ -62,6 +62,7 @@ public class MercSpawner : MonoBehaviour
             GameObject MercAttack = GameObject.Find("MercRecruitAttack");
             GameObject MercDef = GameObject.Find("MercRecruitDef");
             GameObject MercMorale = GameObject.Find("MercRecruitMorale");
+            GameObject MercTrait = GameObject.Find("MercRecruitTrait");
 
             string newName = "Name: " + i.GetComponent<Merc>().mercName;
             textName.GetComponent<Text>().text = newName;
@@ -71,7 +72,9 @@ public class MercSpawner : MonoBehaviour
             MercAttack.GetComponent<Text>().text = "Attack: " + (i.GetComponent<Merc>().strength + i.GetComponent<Merc>().swordSkill).ToString();
             MercDef.GetComponent<Text>().text = "Defense: " + i.GetComponent<Merc>().armorSkill.ToString();
             MercMorale.GetComponent<Text>().text = "Morale: " + i.GetComponent<Merc>().morale.ToString();
-            
+
+            MercTrait.GetComponent<Text>().text = "Trait: " + i.GetComponent<Merc>().traitName;
+
             MercRecruitMenu.SetActive(false);
             
             GameObject recruitButton = GameObject.Find("RecruitToActive");

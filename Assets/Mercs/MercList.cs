@@ -73,6 +73,7 @@ public class MercList : MonoBehaviour
         GameObject MercAttack = GameObject.Find("MercAttack");
         GameObject MercDef = GameObject.Find("MercDef");
         GameObject MercMorale = GameObject.Find("MercMorale");
+        GameObject MercTrait = GameObject.Find("MercTrait");
         string newName = "Name: " + i.GetComponent<Merc>().mercName;
         textName.GetComponent<Text>().text = i.GetComponent<Merc>().mercName;
         mercHP.GetComponent<Text>().text = "HP: " + i.GetComponent<Merc>().currHP.ToString();
@@ -80,6 +81,8 @@ public class MercList : MonoBehaviour
         MercAttack.GetComponent<Text>().text = "Attack: " + (i.GetComponent<Merc>().strength + i.GetComponent<Merc>().swordSkill).ToString();
         MercDef.GetComponent<Text>().text = "Defense: " + i.GetComponent<Merc>().armorSkill.ToString();
         MercMorale.GetComponent<Text>().text = "Morale: " + i.GetComponent<Merc>().morale.ToString();
+
+        MercTrait.GetComponent<Text>().text = "Trait: " + i.GetComponent<Merc>().traitName;
 
         MercManageMenu.SetActive(false);
 
