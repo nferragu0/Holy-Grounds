@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MissionData : MonoBehaviour
 {
+
+    [SerializeField] GameObject completionPanel;
+    [SerializeField] Text completionText;
+
     //storing missions data
     public List<Dictionary<string, string>> missionsInProgress;
     public List<Dictionary<string, string>> availableMissions;
@@ -68,8 +73,11 @@ public class MissionData : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Mission Completed!");
-                    //todo: enter pop up screen upon completion of mission
+                    
+                    completionPanel.SetActive(true);
+                    completionText.text += "Mission Completed:\n Reward: "+dict["reward"]+"\n\n";
+
+                    
                 }
 
             } //update inprogress missions
