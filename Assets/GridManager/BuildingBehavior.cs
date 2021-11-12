@@ -73,26 +73,29 @@ public class BuildingBehavior : MonoBehaviour
                 menu.SetActive(true);
                 break;
             case 1: // Mess Hall
-                menu.SetActive(false);
-                mL = mercList.GetComponent<mercCont>().mercList;
-                messMenu.SetActive(true);
-                makeMessMenu("MessHallListButton", 0);
+                indivBuildingMenu(0);
                 break;
             case 2: // Training Area
                 menu.SetActive(false);
                 //TODO add Training Area Functionality
+                indivBuildingMenu(2);
                 break;
             case 3: // Blacksmith
                 menu.SetActive(false);
                 bs.SetActive(true);
                 break;
             case 4: // Infirmary
-                menu.SetActive(false);
-                mL = mercList.GetComponent<mercCont>().mercList;
-                messMenu.SetActive(true);
-                makeMessMenu("MessHallListButton", 1);
+                indivBuildingMenu(1);
                 break;
         }
+    }
+
+    public void indivBuildingMenu(int ID)
+    {
+        menu.SetActive(false);
+        mL = mercList.GetComponent<mercCont>().mercList;
+        messMenu.SetActive(true);
+        makeMessMenu("MessHallListButton", ID);
     }
 
     public void addMorale(GameObject m)
@@ -133,11 +136,18 @@ public class BuildingBehavior : MonoBehaviour
                     button.GetComponent<Button>().onClick.AddListener(delegate { addMercToInf(merc); });
                     break;
                 case 2: // Training Hall
-                    //button.GetComponent<Button>().onClick.AddListener(delegate { (merc); });
+                    button.GetComponent<Button>().onClick.AddListener(delegate { addTraining(merc); });
                     break;
             }
 
         }
+    }
+
+    public void addTraining(GameObject m)
+    {
+        m.GetComponent<Merc>().daysBusy = 3;
+        m.GetComponent<Merc>().isBusy = true;
+        resource.GetComponent<NDB_Behavior>().trainList.Add(m);
     }
 
     public void addMercToInf(GameObject m)

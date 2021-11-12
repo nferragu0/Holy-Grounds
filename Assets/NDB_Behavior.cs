@@ -149,6 +149,53 @@ public class NDB_Behavior : MonoBehaviour
             holdIndex.Clear();
         }
 
+        if (trainList.Count != 0)
+        {
+            foreach (GameObject merc in trainList)
+            {
+                merc.GetComponent<Merc>().daysBusy -= 1;
+
+                if (merc.GetComponent<Merc>().daysBusy == 0)
+                {
+                    holdIndex.Add(merc);
+                    int r = randInt(5);
+                    int statID = randInt(3);
+                    //Debug.Log("r: " + r);
+                    //Debug.Log("statID: " + statID);
+
+                    switch (statID)
+                    {
+                        case 1: // HP
+                            if (merc.GetComponent<Merc>().maxHP == merc.GetComponent<Merc>().currHP)
+                            {
+                                merc.GetComponent<Merc>().maxHP += r;
+                                merc.GetComponent<Merc>().currHP += r;
+                            } else
+                            {
+                                merc.GetComponent<Merc>().maxHP += r;
+                            }
+                            break;
+                        case 2: // Attack
+                            merc.GetComponent<Merc>().strength += r;
+                            break;
+                        case 3: // Defense
+                            merc.GetComponent<Merc>().armorSkill += r;
+                            break;
+                    }
+                }
+            }
+            foreach (GameObject merc in holdIndex)
+            {
+                Debug.Log(merc.GetComponent<Merc>().mercName + " has finished training");
+                trainList.Remove(merc);
+            }
+
+            holdIndex.Clear();
+
+        }
+
+        
+
         // daily health regen
         foreach (GameObject merc in MercList.GetComponent<mercCont>().mercList)
         {
@@ -177,6 +224,12 @@ public class NDB_Behavior : MonoBehaviour
                 }
             }
         }
+    }
+    
+    public int randInt(int lim)
+    {
+        lim += 1;
+        return Random.Range(1, lim);
     }
 
     public void conflictEventButton1()
