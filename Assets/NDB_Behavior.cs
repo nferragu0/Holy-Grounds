@@ -157,6 +157,7 @@ public class NDB_Behavior : MonoBehaviour
 
                 if (merc.GetComponent<Merc>().daysBusy == 0)
                 {
+                    merc.GetComponent<Merc>().isBusy = false;
                     holdIndex.Add(merc);
                     int r = randInt(5);
                     int statID = randInt(3);
