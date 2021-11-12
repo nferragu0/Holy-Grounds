@@ -21,18 +21,10 @@ public class BuildingBehavior : MonoBehaviour
     public GameObject mercList = null;
     public GameObject panel = null;
 
-    /*
-    void Start()
-    {
-    }
-    */
     public void getActive(Button b)
     {
-        //Debug.Log(b.name);
-        //b.GetComponent<Building_data>().ID = 5;
+        Hide();
         activebutton = b;
-        //Debug.Log(activebutton);
-
     }
 
     public void changeGridID(int ID)
@@ -99,6 +91,8 @@ public class BuildingBehavior : MonoBehaviour
         menu.SetActive(false);
         mL = mercList.GetComponent<mercCont>().mercList;
         messMenu.SetActive(true);
+        GameObject ob = GameObject.Find("BuildingInfo");
+        //Debug.Log(ob.GetComponentInChildren<Text>().text);
         makeMessMenu("MessHallListButton", ID);
     }
 
@@ -195,7 +189,7 @@ public class BuildingBehavior : MonoBehaviour
 
     public void buildingCost(int wood, int iron=0)
     {
-        Debug.Log(resource.GetComponent<NDB_Behavior>().iron);
+        //Debug.Log(resource.GetComponent<NDB_Behavior>().iron);
         resource.GetComponent<NDB_Behavior>().wood -= wood;
         resource.GetComponent<NDB_Behavior>().iron -= iron;
         GameObject ir = GameObject.Find("IronTotal");
