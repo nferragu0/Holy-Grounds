@@ -9,6 +9,7 @@ public class NDB_Behavior : MonoBehaviour
     public int food = 1000;
     public int gold = 1000;
     public int iron = 400;
+    public int wood = 1000;
     public int curr_day = 1;
 
     public int foodUpkeep = 10;

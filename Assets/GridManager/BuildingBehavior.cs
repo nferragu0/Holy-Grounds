@@ -43,18 +43,22 @@ public class BuildingBehavior : MonoBehaviour
             case 1: //Mess Hall
                 activebutton.GetComponent<Image>().color = Color.red;
                 activebutton.GetComponentInChildren<Text>().text = "Mess Hall";
+                buildingCost(50);
                 break;
             case 2: //Training Area
                 activebutton.GetComponent<Image>().color = Color.green;
                 activebutton.GetComponentInChildren<Text>().text = "Training Area";
+                buildingCost(150);
                 break;
             case 3: //Blacksmith
                 activebutton.GetComponent<Image>().color = Color.blue;
                 activebutton.GetComponentInChildren<Text>().text = "Blacksmith";
+                buildingCost(100, 50);
                 break;
             case 4: // Infirmary
                 activebutton.GetComponent<Image>().color = Color.yellow;
                 activebutton.GetComponentInChildren<Text>().text = "Infirmary";
+                buildingCost(100);
                 break;
         }
     }
@@ -187,5 +191,16 @@ public class BuildingBehavior : MonoBehaviour
     public void setCost(int c)
     {
         cost = c;
+    }
+
+    public void buildingCost(int wood, int iron=0)
+    {
+        Debug.Log(resource.GetComponent<NDB_Behavior>().iron);
+        resource.GetComponent<NDB_Behavior>().wood -= wood;
+        resource.GetComponent<NDB_Behavior>().iron -= iron;
+        GameObject ir = GameObject.Find("IronTotal");
+        GameObject wo = GameObject.Find("WoodTotal");
+        ir.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().iron.ToString();
+        wo.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().wood.ToString();
     }
 }
