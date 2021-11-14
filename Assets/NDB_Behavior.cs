@@ -82,7 +82,19 @@ public class NDB_Behavior : MonoBehaviour
         GameObject missionData = GameObject.Find("MissionContainer");
         missionData.GetComponent<MissionData>().incDay();
 
-
+        //decrement daysBusy for mercs
+        List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
+        foreach (GameObject merc in mercs)
+        {
+            if (merc.GetComponent<Merc>().daysBusy == 1)
+            {
+                merc.GetComponent<Merc>().daysBusy = 0;
+                merc.GetComponent<Merc>().isBusy = false;
+            } else if (merc.GetComponent<Merc>().daysBusy > 1)
+            {
+                merc.GetComponent<Merc>().daysBusy -= 1;
+            }
+        }
 
         //apply upkeep
         food -= foodUpkeep;

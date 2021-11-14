@@ -60,7 +60,7 @@ public class MissionScript : MonoBehaviour
             rectTransform.offsetMax = Vector2.zero;
             rectTransform.sizeDelta = new Vector2(100, 100);
 
-            rectTransform.position = new Vector3(300 + (i + 1) * 100, 450, 0);
+            rectTransform.position = new Vector3(225 + (i + 1) * 100, 375, 0);
             button.onClick.AddListener(selectMission);
 
 
@@ -90,9 +90,50 @@ public class MissionScript : MonoBehaviour
 
     void confirmMission()
     {
-        GameObject.Find(currentlySelectedMission.ToString()).GetComponent<Image>().color = Color.clear;
-        missionsInProgress.Add(availableMissions[currentlySelectedMission - 1]);
-        populateViewPort();
+        var mercDisplay = GameObject.Find("Merc Scroll View").GetComponent<MercDisplay>();
+
+        List<int> selectedMercs = mercDisplay.selectedMercs;
+        var totalUnits = mercDisplay.totalUnits;
+        if (selectedMercs.Count > 0)
+        {
+            GameObject.Find(currentlySelectedMission.ToString()).GetComponent<Image>().color = Color.clear;
+            var mission = availableMissions[currentlySelectedMission - 1];
+            missionsInProgress.Add(mission);
+
+            //do calculations for winning or losing mission [still in progress]
+
+            //when mercs meet requirements -> small chance of problems
+            int missionWorkUnits = int.Parse(mission["work units"]);
+            double chanceToSucceed = 1;
+            if (totalUnits <= missionWorkUnits)
+            {
+                if ((missionWorkUnits - totalUnits) > 30)
+                {
+                    chanceToSucceed = 0.1;
+                }else if((missionWorkUnits - totalUnits) > 20)
+                {
+                    chanceToSucceed = 0.25;
+                }
+                else if ((missionWorkUnits - totalUnits) > 10)
+                {
+                    chanceToSucceed = 0.5;
+                }
+                else
+                {
+                    chanceToSucceed = 0.7;
+                }
+            }
+            Debug.Log("mission success chance:"+chanceToSucceed.ToString());
+            List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
+            foreach (var m in selectedMercs)
+            {
+                mercs[m].GetComponent<Merc>().isBusy = true;
+                mercs[m].GetComponent<Merc>().daysBusy = int.Parse(mission["length"]);
+            }
+            populateViewPort();
+        }
+
+        
     }
 
     public void populateViewPort()
