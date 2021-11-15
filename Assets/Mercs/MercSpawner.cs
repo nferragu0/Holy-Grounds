@@ -17,6 +17,8 @@ public class MercSpawner : MonoBehaviour
 
     private UnityAction action;
 
+    public GameObject nextDay;
+
     public void spawnMerc()
     {
 
@@ -112,6 +114,7 @@ public class MercSpawner : MonoBehaviour
                 }
             }
         }
+        
     }
 
     public void deleteRecruitList()

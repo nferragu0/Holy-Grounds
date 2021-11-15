@@ -24,6 +24,17 @@ public class MercList : MonoBehaviour
     GameObject currMerc;
 
     public List<GameObject> deleteList;
+
+    public GameObject sword0actual;
+    public GameObject sword1actual;
+    public GameObject sword2actual;
+    public GameObject sword3actual;
+
+    public GameObject armor0actual;
+    public GameObject armor1actual;
+    public GameObject armor2actual;
+    public GameObject armor3actual;
+
     public void ShowList()
     {
         mercCont oldCont = mercList.GetComponent<mercCont>();
@@ -86,11 +97,15 @@ public class MercList : MonoBehaviour
 
         MercManageMenu.SetActive(false);
 
+
+
     }
     
     public void sword0func()
     {
         equipSword(currMerc, sword0);
+        //GameObject swordInvNum = GameObject.Find("SwordinvAmount5");
+        //swordInvNum.GetComponent<Text>().text = "(" + sword0.GetComponent<weaponInit>().numInv;
     }
     public void sword1func()
     {
@@ -159,6 +174,9 @@ public class MercList : MonoBehaviour
                 i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
             }
         }
+
+
+        updateWeaponCountDisp();
     }
 
     void equipArmor(GameObject i, GameObject e)
@@ -197,5 +215,37 @@ public class MercList : MonoBehaviour
                 i.GetComponent<Merc>().weaponEquip = e.GetComponent<equipInnit>().equipmentPoiner;
             }
         }
+
+        updateArmorCountDisp();
+
+    }
+
+    public void updateWeaponCountDisp()
+    {
+        GameObject swordInvNum = GameObject.Find("SwordinvAmount5");
+        swordInvNum.GetComponent<Text>().text = "(" + sword0actual.GetComponent<weaponInit>().numInv + ")";
+
+        swordInvNum = GameObject.Find("SwordinvAmount10");
+        swordInvNum.GetComponent<Text>().text = "(" + sword1actual.GetComponent<weaponInit>().numInv + ")";
+
+        swordInvNum = GameObject.Find("SwordinvAmount15");
+        swordInvNum.GetComponent<Text>().text = "(" + sword2actual.GetComponent<weaponInit>().numInv + ")";
+
+        swordInvNum = GameObject.Find("SwordinvAmount20");
+        swordInvNum.GetComponent<Text>().text = "(" + sword3actual.GetComponent<weaponInit>().numInv + ")";
+    }
+    public void updateArmorCountDisp()
+    {
+        GameObject swordInvNum = GameObject.Find("ArmorinvAmount5");
+        swordInvNum.GetComponent<Text>().text = "(" + armor0actual.GetComponent<armorInit>().numInv.ToString() + ")";
+
+        swordInvNum = GameObject.Find("ArmorinvAmount10");
+        swordInvNum.GetComponent<Text>().text = "(" + armor1actual.GetComponent<armorInit>().numInv + ")";
+
+        swordInvNum = GameObject.Find("ArmorinvAmount15");
+        swordInvNum.GetComponent<Text>().text = "(" + armor2actual.GetComponent<armorInit>().numInv + ")";
+
+        swordInvNum = GameObject.Find("ArmorinvAmount20");
+        swordInvNum.GetComponent<Text>().text = "(" + armor3actual.GetComponent<armorInit>().numInv + ")";
     }
 }
