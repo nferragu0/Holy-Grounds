@@ -39,7 +39,7 @@ public class NDB_Behavior : MonoBehaviour
 
     public float timeRemaining = 10;
     public int maximum = 100;
-    public int current;
+    public float current;
     public Image mask;
 
     public List<GameObject> infirmList;
@@ -52,7 +52,7 @@ public class NDB_Behavior : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            current = (int)timeRemaining * 10;
+            current = timeRemaining * 10;
             float fillAmount = (float)current / (float)maximum;
             mask.fillAmount = fillAmount;
         }
