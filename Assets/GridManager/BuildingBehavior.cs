@@ -10,6 +10,8 @@ public class BuildingBehavior : MonoBehaviour
     public GameObject messMenu = null;
     public GameObject resource = null;
     public GameObject bs = null;
+    public Sprite gt = null;
+    public Sprite mh = null;
     public List<GameObject> old;
     public int cost = 0;
     public List<GameObject> mercInf;
@@ -32,23 +34,28 @@ public class BuildingBehavior : MonoBehaviour
         activebutton.GetComponent<Building_data>().ID = ID;
         switch (ID)
         {
+            
             case 1: //Mess Hall
-                activebutton.GetComponent<Image>().color = Color.red;
+                    // activebutton.GetComponent<Image>().color = Color.red;
+                activebutton.GetComponent<Image>().sprite = mh;
                 activebutton.GetComponentInChildren<Text>().text = "Mess Hall";
                 buildingCost(50);
                 break;
             case 2: //Training Area
-                activebutton.GetComponent<Image>().color = Color.green;
+                //activebutton.GetComponent<Image>().color = Color.green;
+                activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Training Area";
                 buildingCost(150);
                 break;
             case 3: //Blacksmith
-                activebutton.GetComponent<Image>().color = Color.blue;
+                //activebutton.GetComponent<Image>().color = Color.blue;
+                activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Blacksmith";
                 buildingCost(100, 50);
                 break;
             case 4: // Infirmary
-                activebutton.GetComponent<Image>().color = Color.yellow;
+                //activebutton.GetComponent<Image>().color = Color.yellow;
+                activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Infirmary";
                 buildingCost(100);
                 break;
@@ -69,30 +76,32 @@ public class BuildingBehavior : MonoBehaviour
                 menu.SetActive(true);
                 break;
             case 1: // Mess Hall
-                indivBuildingMenu(0);
+                string mh = "Select a soldier to restore morale";
+                indivBuildingMenu(0, mh);
                 break;
             case 2: // Training Area
-                menu.SetActive(false);
-                //TODO add Training Area Functionality
-                indivBuildingMenu(2);
+                string ta = "Select a soldier to start training";
+                menu.SetActive(false); 
+                indivBuildingMenu(2, ta);
                 break;
             case 3: // Blacksmith
                 menu.SetActive(false);
                 bs.SetActive(true);
                 break;
             case 4: // Infirmary
-                indivBuildingMenu(1);
+                string im = "select a soldier to heal";
+                indivBuildingMenu(1, im);
                 break;
         }
     }
 
-    public void indivBuildingMenu(int ID)
+    public void indivBuildingMenu(int ID, string info)
     {
         menu.SetActive(false);
         mL = mercList.GetComponent<mercCont>().mercList;
         messMenu.SetActive(true);
         GameObject ob = GameObject.Find("BuildingInfo");
-        //Debug.Log(ob.GetComponentInChildren<Text>().text);
+        ob.GetComponentInChildren<Text>().text = info;
         makeMessMenu("MessHallListButton", ID);
     }
 
@@ -118,6 +127,10 @@ public class BuildingBehavior : MonoBehaviour
     {
         foreach (GameObject merc in mL)
         {
+            if (merc.GetComponent<Merc>().isBusy)
+            {
+                continue;
+            }
             GameObject buttonPrefab = GameObject.Find(ob);
             GameObject button = (GameObject)Instantiate(buttonPrefab);
             button.transform.parent = panel.transform;
