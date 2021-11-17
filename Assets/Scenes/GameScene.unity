@@ -1440,9 +1440,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -30.95111, y: 357.7378}
+  m_AnchoredPosition: {x: -13.481506, y: 338.07404}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.47260964, y: 1.1388174}
+  m_Pivot: {x: 0.48806947, y: 1.1037036}
 --- !u!114 &87895730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6051,7 +6051,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 473170838}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1488967398}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &473170838
 MonoBehaviour:
   m_ObjectHideFlags: 0
