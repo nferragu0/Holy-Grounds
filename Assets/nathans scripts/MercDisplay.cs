@@ -21,30 +21,33 @@ public class MercDisplay : MonoBehaviour
     {
 
     }
-    void displayMercs()
+    public void displayMercs()
     {
         //cleanup remove old mercs
-        foreach (Transform child in GameObject.Find("MercContent").transform)
+        if (GameObject.Find("MercContent").transform != null)
         {
-            GameObject.Destroy(child.gameObject);
-        }
-
-        Button button;
-        mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
-        var i = 0;
-        foreach (GameObject merc in mercs)
-        {
-            if (!merc.GetComponent<Merc>().isBusy)
+            foreach (Transform child in GameObject.Find("MercContent").transform)
             {
-                button = Instantiate(mercButton, Vector3.zero, Quaternion.identity) as Button;
-                button.transform.SetParent(GameObject.Find("MercContent").GetComponent<RectTransform>().transform, false);
-                button.name = "merc" + i.ToString();
-                button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
-                button.onClick.AddListener(selectMerc);
-                i++;
+                GameObject.Destroy(child.gameObject);
             }
 
+            Button button;
+            mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
+            var i = 0;
+            foreach (GameObject merc in mercs)
+            {
+                if (!merc.GetComponent<Merc>().isBusy)
+                {
+                    button = Instantiate(mercButton, Vector3.zero, Quaternion.identity) as Button;
+                    button.transform.SetParent(GameObject.Find("MercContent").GetComponent<RectTransform>().transform, false);
+                    button.name = "merc" + i.ToString();
+                    button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
+                    button.onClick.AddListener(selectMerc);
+                    i++;
+                }
+            }
         }
+        
     }
     void selectMerc()
     {
@@ -74,11 +77,15 @@ public class MercDisplay : MonoBehaviour
         }
         GameObject.Find("SelectedMercText").GetComponent<Text>().text = "Total Work Units from Selected Mercenaries: " + totalUnits.ToString();
 
-        
+    }
+    public void updateSelectedMercText()
+    {
+        GameObject.Find("SelectedMercText").GetComponent<Text>().text = "Total Work Units from Selected Mercenaries: " + totalUnits.ToString();
     }
     // Update is called once per frame
     void Update()
     {
         
+
     }
 }

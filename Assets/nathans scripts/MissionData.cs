@@ -8,7 +8,7 @@ public class MissionData : MonoBehaviour
 
     [SerializeField] GameObject completionPanel;
     [SerializeField] Text completionText;
-
+    [SerializeField] GameObject mercScrollView;
     //storing missions data
     public List<Dictionary<string, string>> missionsInProgress;
     public List<Dictionary<string, string>> availableMissions;
@@ -73,10 +73,11 @@ public class MissionData : MonoBehaviour
                 }
                 else
                 {
-                    
+                    //mission complete pop up
+                    //mercScrollView.GetComponent<MercDisplay>().displayMercs();
                     completionPanel.SetActive(true);
                     completionText.text += "Mission Completed:\n Reward: "+dict["reward"]+"\n\n";
-
+                    GameObject.Find("Resource Manager").GetComponent<NDB_Behavior>().gold += int.Parse(dict["reward"]);
                     
                 }
 

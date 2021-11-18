@@ -7,7 +7,10 @@ public class MissionScript : MonoBehaviour
 {
     //button for selecting missions
     [SerializeField] Button newMissionButton;
-
+    //merc list (to update after selectinng mercs)
+    [SerializeField] GameObject mercScrollView;
+    [SerializeField] GameObject missionPanel;
+    [SerializeField] GameObject missionConfirmPanel;
     //storing missions data
     public List<Dictionary<string, string>> missionsInProgress;
     public List<Dictionary<string, string>> availableMissions;
@@ -25,12 +28,10 @@ public class MissionScript : MonoBehaviour
         currentlySelectedMission = -1;
         dayNum = 0;
         //on new day generate Missions
-        generateMission();
+         generateMission();
         
-        //for accepting missions
-        GameObject.Find("ConfirmMissionButton").GetComponent<Button>().onClick.AddListener(confirmMission);
-
-        GameObject.Find("SelectedMissionText").GetComponent<Text>().text = "";
+        
+        
 
     }
 
@@ -80,18 +81,23 @@ public class MissionScript : MonoBehaviour
         GameObject.Find(missionId.ToString()).GetComponent<Image>().color = Color.gray;
 
         
+        
+        missionConfirmPanel.SetActive(true);
+        //after selected
         //set selected mission information on UI
         int position = missionId - 1;
         GameObject.Find("SelectedMissionText").GetComponent<Text>().text =
         "Work Units Required: " + availableMissions[position]["work units"] + "\n" +
         "Length: " + availableMissions[position]["length"] + " days" + "\n" +
         "Reward: " + availableMissions[position]["reward"] + " gold";
+
+        GameObject.Find("ConfirmMissionButton").GetComponent<Button>().onClick.AddListener(confirmMission);
+
     }
 
     void confirmMission()
     {
-        var mercDisplay = GameObject.Find("Merc Scroll View").GetComponent<MercDisplay>();
-
+        var mercDisplay = mercScrollView.GetComponent<MercDisplay>();
         List<int> selectedMercs = mercDisplay.selectedMercs;
         var totalUnits = mercDisplay.totalUnits;
         if (selectedMercs.Count > 0)
@@ -131,6 +137,11 @@ public class MissionScript : MonoBehaviour
                 mercs[m].GetComponent<Merc>().daysBusy = int.Parse(mission["length"]);
             }
             populateViewPort();
+            //mercDisplay.displayMercs();
+            mercDisplay.totalUnits = 0;
+            //mercDisplay.updateSelectedMercText();
+            mercDisplay.selectedMercs = new List<int>();
+            //GameObject.Find("MissionConfirmPanel").SetActive(false);
         }
 
         
@@ -166,9 +177,15 @@ public class MissionScript : MonoBehaviour
         if (dayNum != realDay)
         {
             dayNum = realDay;
-            generateMission();
             missionsInProgress = GameObject.Find("MissionContainer").GetComponent<MissionData>().getMissionsInProgress();
-            populateViewPort();
+            if (missionPanel.activeInHierarchy)
+            {
+                generateMission();
+                populateViewPort();
+            }
+            
+            
+            
         } 
         //call functions to draw and populate stuff
     }

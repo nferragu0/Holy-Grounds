@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class NDB_Behavior : MonoBehaviour
 {
+    [SerializeField] GameObject storyMissionPanel;
     public int food = 1000;
     public int gold = 1000;
     public int iron = 400;
@@ -81,7 +82,11 @@ public class NDB_Behavior : MonoBehaviour
         //keep track of day, inc for mission changes (modify data
         GameObject missionData = GameObject.Find("MissionContainer");
         missionData.GetComponent<MissionData>().incDay();
-
+        //story mission popup
+        if ((curr_day+1) % 10 == 0)
+        {
+            storyMissionPanel.SetActive(true);
+        }
         //decrement daysBusy for mercs
         List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
         foreach (GameObject merc in mercs)
@@ -347,7 +352,7 @@ public class NDB_Behavior : MonoBehaviour
             option2Merc = eventTriggerRecip;
 
             //set text
-            eventText.GetComponent<Text>().text = eventTriggerMerc.GetComponent<Merc>().mercName + " has recentley been fighting with " + eventTriggerRecip.GetComponent<Merc>().mercName + ". We need to do something about this. What are your orders.";
+            eventText.GetComponent<Text>().text = eventTriggerMerc.GetComponent<Merc>().mercName + " has recently been fighting with " + eventTriggerRecip.GetComponent<Merc>().mercName + ". We need to do something about this. What are your orders.";
             option1.GetComponentInChildren<Text>().text = "Give " + eventTriggerRecip.GetComponent<Merc>().mercName + " some gold to make him happy";
             option2.GetComponentInChildren<Text>().text = "Tell them both to knock it off and stop being childish";
 
