@@ -1355,9 +1355,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -4.3410645, y: 339.68994}
+  m_AnchoredPosition: {x: 29.5, y: 416}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.49615836, y: 1.1065892}
+  m_Pivot: {x: 0.5261062, y: 1.2428571}
 --- !u!114 &87895730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14509,8 +14509,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -15325,8 +15325,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -23767,8 +23767,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c2dcdf086972f478e29d21220658a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  header: Iron
-  content: Resource used for building equipment, such as armor or weapons
+  header: Wood
+  content: Resource used for creating buildings
 --- !u!114 &1979384143
 MonoBehaviour:
   m_ObjectHideFlags: 0
