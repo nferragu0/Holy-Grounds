@@ -28,6 +28,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     //Hides the tooltip when clicking, otherwise it continues to show when opening menus since OnPointerExit won't trigger when adding popups
     public void OnPointerClick(PointerEventData eventData)
     {
+        LeanTween.cancel(delay.uniqueId);
         TooltipSystem.Hide();
     }
 }
