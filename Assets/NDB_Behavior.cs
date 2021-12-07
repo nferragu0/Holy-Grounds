@@ -18,6 +18,8 @@ public class NDB_Behavior : MonoBehaviour
 
     public GameObject goldTotal;
     public GameObject foodTotal;
+    public GameObject ironTotal;
+    public GameObject woodTotal;
     public GameObject goldDef;
     public GameObject foodDef;
     public GameObject dayNum;
@@ -46,6 +48,15 @@ public class NDB_Behavior : MonoBehaviour
     public List<GameObject> infirmList;
     public List<GameObject> trainList;
     public List<GameObject> holdIndex;
+
+    public bool farmActive = false;
+    public bool mineActive = false;
+    public bool lumberyardActive = false;
+
+    public int farmlvl = 0;
+    public int minelvl = 0;
+    public int lumberyardlvl = 0;
+
 
 
     void Update()
@@ -211,6 +222,24 @@ public class NDB_Behavior : MonoBehaviour
 
             holdIndex.Clear();
 
+        }
+
+        if (farmActive)
+        {
+            food += (150 + (farmlvl * 50));
+            foodTotal.GetComponent<Text>().text = food.ToString();
+        }
+
+        if (mineActive)
+        {
+            iron += (20 + (minelvl * 5));
+            ironTotal.GetComponent<Text>().text = iron.ToString();
+        }
+
+        if (lumberyardActive)
+        {
+            wood += (30 + (lumberyardlvl * 10));
+            woodTotal.GetComponent<Text>().text = wood.ToString();
         }
 
         

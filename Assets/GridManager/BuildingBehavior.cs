@@ -15,9 +15,12 @@ public class BuildingBehavior : MonoBehaviour
     public List<GameObject> old;
     public int cost = 0;
     public List<GameObject> mercInf;
+    public GameObject ug = null;
 
-
-    //public List<GameObject> deleteList;
+    public int fooodUpCost = 0;
+    public int lumberUpCost = 0;
+    public int mineUpCost = 0;
+    public bool upgradeActive = false;
 
     public List<GameObject> mL;
     public GameObject mercList = null;
@@ -59,6 +62,27 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponentInChildren<Text>().text = "Infirmary";
                 buildingCost(100);
                 break;
+            case 5: //Farm
+                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponentInChildren<Text>().text = "Farm";
+                resource.GetComponent<NDB_Behavior>().farmActive = true;
+                //resource.GetComponent<NDB_Behavior>().farmlvl = 1;
+                buildingCost(100, 0, 50);
+                break;
+            case 6: //Lumber yard
+                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponentInChildren<Text>().text = "Lumber yard";
+                resource.GetComponent<NDB_Behavior>().lumberyardActive = true;
+                //resource.GetComponent<NDB_Behavior>().lumberyardlvl = 1;
+                buildingCost(150, 50);
+                break;
+            case 7: //Mine
+                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponentInChildren<Text>().text = "Mine";
+                resource.GetComponent<NDB_Behavior>().mineActive = true;
+                //resource.GetComponent<NDB_Behavior>().minelvl = 1;
+                buildingCost(100, 50);
+                break;
         }
     }
 
@@ -81,23 +105,68 @@ public class BuildingBehavior : MonoBehaviour
                 break;
             case 2: // Training Area
                 string ta = "Select a soldier to start training";
-                menu.SetActive(false); 
+                hideMenu();
                 indivBuildingMenu(2, ta);
                 break;
             case 3: // Blacksmith
-                menu.SetActive(false);
+                hideMenu();
                 bs.SetActive(true);
                 break;
             case 4: // Infirmary
                 string im = "select a soldier to heal";
                 indivBuildingMenu(1, im);
                 break;
+            case 5: //Farm
+                if (upgradeActive)
+                {
+                    showUpgradeMenu(1, "Farm");
+                }
+                
+                break;
+            case 6: //Lumber yard
+                if (upgradeActive)
+                {
+                    showUpgradeMenu(2, "Lumber Yard");
+                }
+                break;
+            case 7: //Mine
+                if (upgradeActive)
+                {
+                    showUpgradeMenu(3, "Mine");
+                }
+                break;
+        }
+    }
+
+    public void hideMenu()
+    {
+        menu.SetActive(false);
+    }
+
+    public void showUpgradeMenu(int ID, string txt)
+    {
+        hideMenu();
+        ug.SetActive(true);
+        GameObject bn = GameObject.Find("buildingName");
+        bn.GetComponent<Text>().text = txt;
+
+        switch (ID)
+        {
+            case 1: //Farm
+                Debug.Log("Farm");
+                break;
+            case 2: //Lumber yard
+                Debug.Log("Lumber");
+                break;
+            case 3: //Mine
+                Debug.Log("Mine");
+                break;
         }
     }
 
     public void indivBuildingMenu(int ID, string info)
     {
-        menu.SetActive(false);
+        hideMenu();
         mL = mercList.GetComponent<mercCont>().mercList;
         messMenu.SetActive(true);
         GameObject ob = GameObject.Find("BuildingInfo");
@@ -200,14 +269,17 @@ public class BuildingBehavior : MonoBehaviour
         cost = c;
     }
 
-    public void buildingCost(int wood, int iron=0)
+    public void buildingCost(int wood, int iron=0, int food=0)
     {
         //Debug.Log(resource.GetComponent<NDB_Behavior>().iron);
         resource.GetComponent<NDB_Behavior>().wood -= wood;
         resource.GetComponent<NDB_Behavior>().iron -= iron;
+        resource.GetComponent<NDB_Behavior>().food -= food;
         GameObject ir = GameObject.Find("IronTotal");
         GameObject wo = GameObject.Find("WoodTotal");
+        GameObject fo = GameObject.Find("FoodTotal");
         ir.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().iron.ToString();
         wo.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().wood.ToString();
+        fo.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().food.ToString();
     }
 }
