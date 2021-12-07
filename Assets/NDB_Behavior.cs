@@ -58,7 +58,6 @@ public class NDB_Behavior : MonoBehaviour
     public int lumberyardlvl = 0;
 
 
-
     void Update()
     {
         if (timeRemaining > 0)
@@ -188,7 +187,7 @@ public class NDB_Behavior : MonoBehaviour
                 {
                     merc.GetComponent<Merc>().isBusy = false;
                     holdIndex.Add(merc);
-                    int r = randInt(5);
+                    int r = randInt(7);
                     int statID = randInt(3);
                     //Debug.Log("r: " + r);
                     //Debug.Log("statID: " + statID);
@@ -226,19 +225,19 @@ public class NDB_Behavior : MonoBehaviour
 
         if (farmActive)
         {
-            food += (150 + (farmlvl * 50));
+            food += (100 + (farmlvl * 50));
             foodTotal.GetComponent<Text>().text = food.ToString();
         }
 
         if (mineActive)
         {
-            iron += (20 + (minelvl * 5));
+            iron += (30 + (minelvl * 10));
             ironTotal.GetComponent<Text>().text = iron.ToString();
         }
 
         if (lumberyardActive)
         {
-            wood += (30 + (lumberyardlvl * 10));
+            wood += (50 + (lumberyardlvl * 15));
             woodTotal.GetComponent<Text>().text = wood.ToString();
         }
 

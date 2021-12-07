@@ -20,11 +20,22 @@ public class BuildingBehavior : MonoBehaviour
     public int fooodUpCost = 0;
     public int lumberUpCost = 0;
     public int mineUpCost = 0;
-    public bool upgradeActive = false;
+    public bool upgradeActive = true;
 
     public List<GameObject> mL;
     public GameObject mercList = null;
     public GameObject panel = null;
+
+    public GameObject buildlvl = null;
+    public GameObject foodCost = null;
+    public GameObject woodCost = null;
+    public GameObject ironCost = null;
+    public int buildingTolvlUp;
+
+    public int foodUpgradeCost = 0;
+    public int woodUpgradeCost = 0;
+    public int ironUpgradeCost = 0;
+
 
     public void getActive(Button b)
     {
@@ -66,6 +77,8 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Farm";
                 resource.GetComponent<NDB_Behavior>().farmActive = true;
+                buildingTolvlUp = 1;
+                upgrade();
                 //resource.GetComponent<NDB_Behavior>().farmlvl = 1;
                 buildingCost(100, 0, 50);
                 break;
@@ -73,6 +86,8 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Lumber yard";
                 resource.GetComponent<NDB_Behavior>().lumberyardActive = true;
+                buildingTolvlUp = 2;
+                upgrade();
                 //resource.GetComponent<NDB_Behavior>().lumberyardlvl = 1;
                 buildingCost(150, 50);
                 break;
@@ -80,6 +95,8 @@ public class BuildingBehavior : MonoBehaviour
                 activebutton.GetComponent<Image>().sprite = gt;
                 activebutton.GetComponentInChildren<Text>().text = "Mine";
                 resource.GetComponent<NDB_Behavior>().mineActive = true;
+                buildingTolvlUp = 3;
+                upgrade();
                 //resource.GetComponent<NDB_Behavior>().minelvl = 1;
                 buildingCost(100, 50);
                 break;
@@ -130,10 +147,13 @@ public class BuildingBehavior : MonoBehaviour
                 }
                 break;
             case 7: //Mine
+                //Debug.Log(upgradeActive);
                 if (upgradeActive)
                 {
+                    //Debug.Log("What");
                     showUpgradeMenu(3, "Mine");
                 }
+                
                 break;
         }
     }
@@ -149,17 +169,103 @@ public class BuildingBehavior : MonoBehaviour
         ug.SetActive(true);
         GameObject bn = GameObject.Find("buildingName");
         bn.GetComponent<Text>().text = txt;
+        int lvl = 0;
 
         switch (ID)
         {
             case 1: //Farm
-                Debug.Log("Farm");
+                //Debug.Log("Farm");
+                buildingTolvlUp = 1;
+                lvl = resource.GetComponent<NDB_Behavior>().farmlvl;
+                calcUpgradeCost(lvl);
+                buildlvl.GetComponent<Text>().text = lvl.ToString();
                 break;
             case 2: //Lumber yard
-                Debug.Log("Lumber");
+                //Debug.Log("Lumber");
+                buildingTolvlUp = 2;
+                lvl = resource.GetComponent<NDB_Behavior>().lumberyardlvl;
+                calcUpgradeCost(lvl);
+                buildlvl.GetComponent<Text>().text = lvl.ToString();
                 break;
             case 3: //Mine
-                Debug.Log("Mine");
+                //Debug.Log("Mine");
+                buildingTolvlUp = 3;
+                lvl = resource.GetComponent<NDB_Behavior>().minelvl;
+                calcUpgradeCost(lvl);
+                buildlvl.GetComponent<Text>().text = lvl.ToString();
+                break;
+        }
+    }
+
+    public void calcUpgradeCost(int lvl)
+    {
+        lvl += 1;
+        switch (buildingTolvlUp)
+        {
+            case 1: //Farm
+                foodUpgradeCost = lvl * 50;
+                woodUpgradeCost = lvl * 20;
+                ironUpgradeCost = lvl * 10;
+                break;
+            case 2: //Lumber Yard
+                foodUpgradeCost = 0;
+                woodUpgradeCost = lvl * 40;
+                ironUpgradeCost = lvl * 15;
+                break;
+            case 3: //Mine
+                foodUpgradeCost = 0;
+                woodUpgradeCost = lvl * 20;
+                ironUpgradeCost = lvl * 40;
+                break;
+        }
+
+        foodCost.GetComponent<Text>().text = foodUpgradeCost.ToString();
+        woodCost.GetComponent<Text>().text = woodUpgradeCost.ToString();
+        ironCost.GetComponent<Text>().text = ironUpgradeCost.ToString();
+    }
+
+    public void spendResources()
+    {
+        int fo = resource.GetComponent<NDB_Behavior>().food;
+        int wo = resource.GetComponent<NDB_Behavior>().wood;
+        int ir = resource.GetComponent<NDB_Behavior>().iron;
+
+        if (fo < foodUpgradeCost || wo < woodUpgradeCost || ir < ironUpgradeCost)
+        {
+            GameObject.Find("upgradeError").GetComponent<Text>().text = "Upgrade reguirements not met";
+        }
+        else
+        {
+            resource.GetComponent<NDB_Behavior>().food -= foodUpgradeCost;
+            resource.GetComponent<NDB_Behavior>().wood -= woodUpgradeCost;
+            resource.GetComponent<NDB_Behavior>().iron -= ironUpgradeCost;
+            GameObject irr = GameObject.Find("IronTotal");
+            GameObject wor = GameObject.Find("WoodTotal");
+            GameObject fou = GameObject.Find("FoodTotal");
+            irr.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().iron.ToString();
+            wor.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().wood.ToString();
+            fou.GetComponent<Text>().text = resource.GetComponent<NDB_Behavior>().food.ToString();
+
+
+        }
+
+    }
+
+    public void upgrade()
+    {
+        switch (buildingTolvlUp)
+        {
+            case 1:
+                resource.GetComponent<NDB_Behavior>().farmlvl += 1;
+                spendResources();
+                break;
+            case 2:
+                resource.GetComponent<NDB_Behavior>().lumberyardlvl += 1;
+                spendResources();
+                break;
+            case 3:
+                resource.GetComponent<NDB_Behavior>().minelvl += 1;
+                spendResources();
                 break;
         }
     }
