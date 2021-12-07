@@ -87,6 +87,7 @@ public class MissionScript : MonoBehaviour
         //set selected mission information on UI
         int position = missionId - 1;
         GameObject.Find("SelectedMissionText").GetComponent<Text>().text =
+        availableMissions[position]["missionText"]+"\n\n"+
         "Work Units Required: " + availableMissions[position]["work units"] + "\n" +
         "Length: " + availableMissions[position]["length"] + " days" + "\n" +
         "Reward: " + availableMissions[position]["reward"] + " gold";
@@ -94,6 +95,57 @@ public class MissionScript : MonoBehaviour
         GameObject.Find("ConfirmMissionButton").GetComponent<Button>().onClick.AddListener(confirmMission);
 
     }
+    string calculateSuccess(int missionUnits, int mercUnits)
+    {
+        if (mercUnits < missionUnits)
+        {
+            if ((missionUnits - mercUnits) > 30)
+            {
+                if (Random.Range(0, 100) < 10)
+                {
+                    return "Partial Success";
+                } else
+                {
+                    return "Failure";
+                }
+            }
+            else if ((missionUnits - mercUnits) > 20)
+            {
+                if (Random.Range(0, 100) < 25)
+                {
+                    return "Partial Success";
+                }
+                else
+                {
+                    return "Failure";
+                }
+            }
+            else if ((missionUnits - mercUnits) > 10)
+            {
+                if (Random.Range(0, 100) < 50)
+                {
+                    return "Partial Success";
+                }
+                else
+                {
+                    return "Failure";
+                }
+            }
+            else if ((missionUnits - mercUnits) > 0)
+            {
+                if (Random.Range(0, 100) < 70)
+                {
+                    return "Partial Success";
+                } 
+                else
+                {
+                    return "Failure";
+                }
+            }
+        }
+        return "Success";
+    }
+
 
     void confirmMission()
     {
@@ -104,32 +156,17 @@ public class MissionScript : MonoBehaviour
         {
             GameObject.Find(currentlySelectedMission.ToString()).GetComponent<Image>().color = Color.clear;
             var mission = availableMissions[currentlySelectedMission - 1];
-            missionsInProgress.Add(mission);
-
+            
             //do calculations for winning or losing mission [still in progress]
-
             //when mercs meet requirements -> small chance of problems
             int missionWorkUnits = int.Parse(mission["work units"]);
-            double chanceToSucceed = 1;
-            if (totalUnits <= missionWorkUnits)
-            {
-                if ((missionWorkUnits - totalUnits) > 30)
-                {
-                    chanceToSucceed = 0.1;
-                }else if((missionWorkUnits - totalUnits) > 20)
-                {
-                    chanceToSucceed = 0.25;
-                }
-                else if ((missionWorkUnits - totalUnits) > 10)
-                {
-                    chanceToSucceed = 0.5;
-                }
-                else
-                {
-                    chanceToSucceed = 0.7;
-                }
-            }
-            Debug.Log("mission success chance:"+chanceToSucceed.ToString());
+            mission.Add("result", calculateSuccess(missionWorkUnits, totalUnits));
+
+            missionsInProgress.Add(mission);
+
+
+
+            
             List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
             foreach (var m in selectedMercs)
             {

@@ -7,12 +7,20 @@ public class MercDisplay : MonoBehaviour
 {
     [SerializeField] Button mercButton;
     [SerializeField] Button missionMenuButton;
+    [SerializeField] Button backButton;
+    [SerializeField] GameObject mercText;
     List<GameObject> mercs;
     public int totalUnits;
     public List<int> selectedMercs;
-    
+    void reset()
+    {
+        totalUnits = 0;
+        selectedMercs = new List<int>();
+        mercText.GetComponent<Text>().text = "Total Work Units from Selected Mercenaries:";
+    }
     void OnEnable()
     {
+        backButton.onClick.AddListener(reset);
         displayMercs();
     }
     

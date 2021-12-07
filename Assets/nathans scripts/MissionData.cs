@@ -12,6 +12,7 @@ public class MissionData : MonoBehaviour
     //storing missions data
     public List<Dictionary<string, string>> missionsInProgress;
     public List<Dictionary<string, string>> availableMissions;
+    public Dictionary<string, string> storyMission;
 
     public int day;
     public int getDay()
@@ -31,6 +32,7 @@ public class MissionData : MonoBehaviour
     {
         missionsInProgress = new List<Dictionary<string, string>>();
         availableMissions = new List<Dictionary<string, string>>();
+        storyMission = new Dictionary<string, string>();
         day = 0;
         generateMissions();
     }
@@ -43,21 +45,56 @@ public class MissionData : MonoBehaviour
     public void generateMissions()
     {
         availableMissions = new List<Dictionary<string, string>>();
+
         //mission
         for (int i = 0; i < 3; i++)
         {
+
+            string firstPath = "assets/missionsText.txt";
+
+            string[] lines = System.IO.File.ReadAllLines(firstPath);
+            string missionText = lines[Random.Range(0, lines.Length)];
             //create mission information into a dictionary
             Dictionary<string, string> newMission = new Dictionary<string, string>();
             //create mission gameobject with dictionary of values
-            newMission.Add("work units", Random.Range(1, 4).ToString());
+            newMission.Add("work units", Random.Range(10, 100).ToString());
             newMission.Add("length", Random.Range(1, 4).ToString());
             newMission.Add("reward", Random.Range(75, 200).ToString());
+            newMission.Add("missionText", missionText);
             //append mission to container
             availableMissions.Add(newMission);
         }
     }
+
+    public void generateStoryMission()
+    {
+        
+        
+        //creates new story mission
+        storyMission = new Dictionary<string, string>();
+        storyMission.Add("length", "5");
+        storyMission.Add("reward", (day * 20).ToString());
+        storyMission.Add("work units", (day * 5).ToString());
+    }
+
     public void nextDay() //mission progresses
     {
+        if (storyMission.Count != 0)
+        {
+            if (storyMission["length"] != "0")
+            {
+                int len = int.Parse(storyMission["length"]);
+                storyMission["length"] = (len - 1).ToString();
+            }
+            else
+            {
+                //display completed
+                completionPanel.SetActive(true);
+                completionText.text += "Story Mission Completed:\n Reward: " + storyMission["reward"] + "\n\n";
+                GameObject.Find("Resource Manager").GetComponent<NDB_Behavior>().gold += int.Parse(storyMission["reward"]);
+                storyMission = new Dictionary<string, string>();
+            }
+        }
         if (missionsInProgress.Count > 0)
         {
             //decrement lengths of missions
@@ -74,10 +111,22 @@ public class MissionData : MonoBehaviour
                 else
                 {
                     //mission complete pop up
-                    //mercScrollView.GetComponent<MercDisplay>().displayMercs();
+                    string res = dict["result"];
+                    int reward = int.Parse(dict["reward"]);
+                    if (res == "Partial Success")
+                    {
+                        reward = (int)(0.75f * (float)reward);
+                    } else if (res == "Failure")
+                    {
+                        reward = 0;
+                    } else if (res == "Partial Failure")
+                    {
+                        reward /= 2;
+                    }
+
                     completionPanel.SetActive(true);
-                    completionText.text += "Mission Completed:\n Reward: "+dict["reward"]+"\n\n";
-                    GameObject.Find("Resource Manager").GetComponent<NDB_Behavior>().gold += int.Parse(dict["reward"]);
+                    completionText.text += "Mission Completed with "+dict["result"]+"\n Reward: "+reward.ToString()+"\n\n";
+                    GameObject.Find("Resource Manager").GetComponent<NDB_Behavior>().gold += reward;
                     
                 }
 
