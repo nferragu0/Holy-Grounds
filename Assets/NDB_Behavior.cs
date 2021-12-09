@@ -93,10 +93,20 @@ public class NDB_Behavior : MonoBehaviour
         GameObject missionData = GameObject.Find("MissionContainer");
         missionData.GetComponent<MissionData>().incDay();
         //story mission popup
-        if ((curr_day+1) % 10 == 0)
+        //jazer: story missions only to 100
+        if((curr_day+1) <= 100){
+        
+         if ((curr_day+1) % 10 == 0)
         {
             storyMissionPanel.SetActive(true);
         }
+        } else{
+
+            storyMissionPanel.SetActive(false);
+        }
+
+
+
         //decrement daysBusy for mercs
         List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
         foreach (GameObject merc in mercs)
