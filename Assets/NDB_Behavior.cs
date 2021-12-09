@@ -94,7 +94,7 @@ public class NDB_Behavior : MonoBehaviour
         missionData.GetComponent<MissionData>().incDay();
         //story mission popup
         //jazer: story missions only to 100
-        if((curr_day+1) <= 100){
+        if((curr_day+1) <= 70){
         
          if ((curr_day+1) % 10 == 0)
         {

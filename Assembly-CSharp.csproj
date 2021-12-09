@@ -100,6 +100,7 @@
      <Compile Include="Assets\Building Scripts\GameHandler.cs" />
      <Compile Include="Assets\Mercs\MercSpawner.cs" />
      <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralBasic.cs" />
+     <Compile Include="Assets\IntroScene.cs" />
      <Compile Include="Assets\LeanTween\Examples\Archived\TestingRigidbodyCS.cs" />
      <Compile Include="Assets\Mercs\mercCont.cs" />
      <Compile Include="Assets\LeanTween\Examples\Scripts\Following.cs" />
