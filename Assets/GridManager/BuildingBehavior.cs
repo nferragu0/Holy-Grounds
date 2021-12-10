@@ -12,6 +12,10 @@ public class BuildingBehavior : MonoBehaviour
     public GameObject bs = null;
     public Sprite gt = null;
     public Sprite mh = null;
+    public Sprite gb = null;
+    public Sprite inf = null;
+    public Sprite mi = null;
+    public Sprite lu = null;
     public List<GameObject> old;
     public int cost = 0;
     public List<GameObject> mercInf;
@@ -63,13 +67,13 @@ public class BuildingBehavior : MonoBehaviour
                 break;
             case 3: //Blacksmith
                 //activebutton.GetComponent<Image>().color = Color.blue;
-                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponent<Image>().sprite = gb;
                 activebutton.GetComponentInChildren<Text>().text = "Blacksmith";
                 buildingCost(100, 50);
                 break;
             case 4: // Infirmary
                 //activebutton.GetComponent<Image>().color = Color.yellow;
-                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponent<Image>().sprite = inf;
                 activebutton.GetComponentInChildren<Text>().text = "Infirmary";
                 buildingCost(100);
                 break;
@@ -83,7 +87,7 @@ public class BuildingBehavior : MonoBehaviour
                 buildingCost(100, 0, 50);
                 break;
             case 6: //Lumber yard
-                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponent<Image>().sprite = lu;
                 activebutton.GetComponentInChildren<Text>().text = "Lumber yard";
                 resource.GetComponent<NDB_Behavior>().lumberyardActive = true;
                 buildingTolvlUp = 2;
@@ -92,7 +96,7 @@ public class BuildingBehavior : MonoBehaviour
                 buildingCost(150, 50);
                 break;
             case 7: //Mine
-                activebutton.GetComponent<Image>().sprite = gt;
+                activebutton.GetComponent<Image>().sprite = mi;
                 activebutton.GetComponentInChildren<Text>().text = "Mine";
                 resource.GetComponent<NDB_Behavior>().mineActive = true;
                 buildingTolvlUp = 3;
