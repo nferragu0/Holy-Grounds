@@ -59,7 +59,7 @@ public class MissionData : MonoBehaviour
             //create mission gameobject with dictionary of values
             newMission.Add("work units", Random.Range(10, 100).ToString());
             newMission.Add("length", Random.Range(1, 4).ToString());
-            newMission.Add("reward", Random.Range(75, 200).ToString());
+            newMission.Add("reward", Random.Range(100, 300).ToString());
             newMission.Add("missionText", missionText);
             //append mission to container
             availableMissions.Add(newMission);

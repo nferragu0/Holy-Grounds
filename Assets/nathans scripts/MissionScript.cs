@@ -7,6 +7,8 @@ public class MissionScript : MonoBehaviour
 {
     //button for selecting missions
     [SerializeField] Button newMissionButton;
+    //missionconfirm button
+    [SerializeField] Button confirmMissionButton;
     //merc list (to update after selectinng mercs)
     [SerializeField] GameObject mercScrollView;
     [SerializeField] GameObject missionPanel;
@@ -29,9 +31,9 @@ public class MissionScript : MonoBehaviour
         dayNum = 0;
         //on new day generate Missions
          generateMission();
-        
-        
-        
+
+        confirmMissionButton.GetComponent<Button>().onClick.AddListener(confirmMission);
+
 
     }
 
@@ -91,8 +93,10 @@ public class MissionScript : MonoBehaviour
         "Work Units Required: " + availableMissions[position]["work units"] + "\n" +
         "Length: " + availableMissions[position]["length"] + " days" + "\n" +
         "Reward: " + availableMissions[position]["reward"] + " gold";
+        
+        mercScrollView.GetComponent<MercDisplay>().displayMercs();
+        
 
-        GameObject.Find("ConfirmMissionButton").GetComponent<Button>().onClick.AddListener(confirmMission);
 
     }
     string calculateSuccess(int missionUnits, int mercUnits)
@@ -150,7 +154,7 @@ public class MissionScript : MonoBehaviour
     void confirmMission()
     {
         var mercDisplay = mercScrollView.GetComponent<MercDisplay>();
-        List<int> selectedMercs = mercDisplay.selectedMercs;
+        List<GameObject> selectedMercs = mercDisplay.selectedMercs;
         var totalUnits = mercDisplay.totalUnits;
         if (selectedMercs.Count > 0)
         {
@@ -160,7 +164,8 @@ public class MissionScript : MonoBehaviour
             //do calculations for winning or losing mission [still in progress]
             //when mercs meet requirements -> small chance of problems
             int missionWorkUnits = int.Parse(mission["work units"]);
-            mission.Add("result", calculateSuccess(missionWorkUnits, totalUnits));
+            
+            if (!mission.ContainsKey("result")) { mission.Add("result", calculateSuccess(missionWorkUnits, totalUnits)); }
 
             missionsInProgress.Add(mission);
 
@@ -170,15 +175,16 @@ public class MissionScript : MonoBehaviour
             List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
             foreach (var m in selectedMercs)
             {
-                mercs[m].GetComponent<Merc>().isBusy = true;
-                mercs[m].GetComponent<Merc>().daysBusy = int.Parse(mission["length"]);
+                m.GetComponent<Merc>().isBusy = true;
+                m.GetComponent<Merc>().daysBusy = int.Parse(mission["length"]);
             }
             populateViewPort();
             //mercDisplay.displayMercs();
             mercDisplay.totalUnits = 0;
             //mercDisplay.updateSelectedMercText();
-            mercDisplay.selectedMercs = new List<int>();
+            //mercDisplay.selectedMercs = new List<int>();
             //GameObject.Find("MissionConfirmPanel").SetActive(false);
+            selectedMercs = new List<GameObject>();
         }
 
         
@@ -214,6 +220,7 @@ public class MissionScript : MonoBehaviour
         if (dayNum != realDay)
         {
             dayNum = realDay;
+            //availableMissions = new List<Dictionary<string, string>>();
             missionsInProgress = GameObject.Find("MissionContainer").GetComponent<MissionData>().getMissionsInProgress();
             if (missionPanel.activeInHierarchy)
             {

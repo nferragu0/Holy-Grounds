@@ -11,11 +11,11 @@ public class MercDisplay : MonoBehaviour
     [SerializeField] GameObject mercText;
     List<GameObject> mercs;
     public int totalUnits;
-    public List<int> selectedMercs;
+    public List<GameObject> selectedMercs;
     void reset()
     {
         totalUnits = 0;
-        selectedMercs = new List<int>();
+        selectedMercs = new List<GameObject>();
         mercText.GetComponent<Text>().text = "Total Work Units from Selected Mercenaries:";
     }
     void OnEnable()
@@ -49,39 +49,50 @@ public class MercDisplay : MonoBehaviour
                     button = Instantiate(mercButton, Vector3.zero, Quaternion.identity) as Button;
                     button.transform.SetParent(GameObject.Find("MercContent").GetComponent<RectTransform>().transform, false);
                     button.name = "merc" + i.ToString();
-                    button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
-                    button.onClick.AddListener(selectMerc);
+                    
+                    string name = merc.GetComponent<Merc>().mercName;
+                    button.GetComponentInChildren<Text>().text = name;
+
+                    Debug.Log(name);
+
+                    button.onClick.AddListener(()=>selectMerc(name));
                     i++;
                 }
             }
         }
         
     }
-    void selectMerc()
+    public void selectMerc(string n)
     {
-        var slen = 1;
+        GameObject mercenary = new GameObject();
+        //finds and adds the merc to selected mercs
+        foreach (GameObject merc in mercs)
+        {
+            if (merc.GetComponent<Merc>().mercName == n)
+            {
+                selectedMercs.Add(merc);
+                mercenary = merc;
+            }
+        }
+
+
+
         var mercButton = EventSystem.current.currentSelectedGameObject;
-        var name = mercButton.name;
-        if (name.Length > 5) //just in case the player happens to have more than 9 mercs
-            slen = 2;
-        var mercID = int.Parse(name.Substring(4,slen));//id of selected merc
 
         //change shade of button
         if (mercButton.GetComponent<Image>().color.Equals(Color.gray))
         {
             mercButton.GetComponent<Image>().color = Color.white;
-            totalUnits -= mercs[mercID].GetComponent<Merc>().getMissionUnit();
-            selectedMercs.Remove(mercID);
-            //mercs[mercID].GetComponent<Merc>().isBusy = false;
-           
+            totalUnits -= mercenary.GetComponent<Merc>().getMissionUnit();
+            selectedMercs.Remove(mercenary);
+
         }
         else
         {
             mercButton.GetComponent<Image>().color = Color.gray;
-            totalUnits += mercs[mercID].GetComponent<Merc>().getMissionUnit();
-            selectedMercs.Add(mercID);
-            //mercs[mercID].GetComponent<Merc>().isBusy = true;
-            
+            totalUnits += mercenary.GetComponent<Merc>().getMissionUnit();
+            selectedMercs.Add(mercenary);
+
         }
         GameObject.Find("SelectedMercText").GetComponent<Text>().text = "Total Work Units from Selected Mercenaries: " + totalUnits.ToString();
 

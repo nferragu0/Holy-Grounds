@@ -11,8 +11,8 @@ public class StoryMissionScript : MonoBehaviour
     [SerializeField] Button confirmButton;
     List<GameObject> mercs;
     public int totalUnits;
-    public List<int> selectedMercs;
-    
+    public List<GameObject> selectedMercs;
+
     public void displayMercs()
     {
         //cleanup remove old mercs
@@ -33,39 +33,49 @@ public class StoryMissionScript : MonoBehaviour
                     button = Instantiate(mercButton, Vector3.zero, Quaternion.identity) as Button;
                     button.transform.SetParent(GameObject.Find("MercContent2").GetComponent<RectTransform>().transform, false);
                     button.name = "merc" + i.ToString();
-                    button.GetComponentInChildren<Text>().text = merc.GetComponent<Merc>().mercName;
-                    button.onClick.AddListener(selectMerc);
+
+                    string name = merc.GetComponent<Merc>().mercName;
+                    button.GetComponentInChildren<Text>().text = name;
+
+                    //Debug.Log(name);
+
+                    button.onClick.AddListener(() => selectMerc(name));
                     i++;
                 }
             }
         }
 
     }
-    
-    void selectMerc()
+    public void selectMerc(string n)
     {
-        var slen = 1;
+        GameObject mercenary = new GameObject();
+        //finds and adds the merc to selected mercs
+        foreach (GameObject merc in mercs)
+        {
+            if (merc.GetComponent<Merc>().mercName == n)
+            {
+                selectedMercs.Add(merc);
+                mercenary = merc;
+            }
+        }
+
+
+
         var mercButton = EventSystem.current.currentSelectedGameObject;
-        var name = mercButton.name;
-        if (name.Length > 5) //just in case the player happens to have more than 9 mercs
-            slen = 2;
-        var mercID = int.Parse(name.Substring(4, slen));//id of selected merc
 
         //change shade of button
         if (mercButton.GetComponent<Image>().color.Equals(Color.gray))
         {
             mercButton.GetComponent<Image>().color = Color.white;
-            totalUnits -= mercs[mercID].GetComponent<Merc>().getMissionUnit();
-            selectedMercs.Remove(mercID);
-            //mercs[mercID].GetComponent<Merc>().isBusy = false;
+            totalUnits -= mercenary.GetComponent<Merc>().getMissionUnit();
+            selectedMercs.Remove(mercenary);
 
         }
         else
         {
             mercButton.GetComponent<Image>().color = Color.gray;
-            totalUnits += mercs[mercID].GetComponent<Merc>().getMissionUnit();
-            selectedMercs.Add(mercID);
-            //mercs[mercID].GetComponent<Merc>().isBusy = true;
+            totalUnits += mercenary.GetComponent<Merc>().getMissionUnit();
+            selectedMercs.Add(mercenary);
 
         }
         GameObject.Find("MercText").GetComponent<Text>().text = "Total Work Units from Selected Mercenaries: " + totalUnits.ToString();
@@ -81,18 +91,31 @@ public class StoryMissionScript : MonoBehaviour
     {
         displayMercs();
         GameObject.Find("MissionContainer").GetComponent<MissionData>().generateStoryMission();
+
+        //get current day
+        int day = GameObject.Find("MissionContainer").GetComponent<MissionData>().getDay();
+
+        string firstPath = "assets/storiesText.txt";
+
+        string[] lines = System.IO.File.ReadAllLines(firstPath);
+
+        GameObject.Find("StoryText").GetComponent<Text>().text = lines[day/10];
+
+
         confirmButton.onClick.AddListener(startMission);
     }
     void startMission()
     {
+        
+
         List<GameObject> mercs = GameObject.Find("MercContainer").GetComponent<mercCont>().mercList;
         foreach (var m in selectedMercs)
         {
-            mercs[m].GetComponent<Merc>().isBusy = true;
-            mercs[m].GetComponent<Merc>().daysBusy = int.Parse(GameObject.Find("MissionContainer").GetComponent<MissionData>().storyMission["length"]);
+            mercs[mercs.IndexOf(m)].GetComponent<Merc>().isBusy = true;
+            mercs[mercs.IndexOf(m)].GetComponent<Merc>().daysBusy = int.Parse(GameObject.Find("MissionContainer").GetComponent<MissionData>().storyMission["length"]);
         }
         totalUnits = 0;
-        selectedMercs = new List<int>();
+        selectedMercs = new List<GameObject>();
     }
 
     // Start is called before the first frame update

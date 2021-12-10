@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class NDB_Behavior : MonoBehaviour
 {
     [SerializeField] GameObject storyMissionPanel;
+    [SerializeField] GameObject completionPanel;
     public int food = 1000;
     public int gold = 1000;
     public int iron = 400;
@@ -94,13 +95,13 @@ public class NDB_Behavior : MonoBehaviour
         missionData.GetComponent<MissionData>().incDay();
         //story mission popup
         //jazer: story missions only to 100
-        if((curr_day+1) <= 70){
-        
-         if ((curr_day+1) % 10 == 0)
+        if((curr_day+1) == 75)
         {
+            completionPanel.SetActive(true);
+        }else if ((curr_day+1) % 10 == 0){
             storyMissionPanel.SetActive(true);
         }
-        } else{
+        else{
 
             storyMissionPanel.SetActive(false);
         }
